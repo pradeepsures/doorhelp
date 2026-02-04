@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+/* Hide browser scrollbar */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+/* Simple thin rounded scrollbar */
+.sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #45d85e transparent;
+}
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 10px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: #45d85e;
+  border-radius: 10px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: #2da644;
+}
+
+/* Main content scrollbar */
+main {
+  scrollbar-width: thin;
+  scrollbar-color: #45d85e transparent;
+}
+
+main::-webkit-scrollbar {
+  width: 10px;
+}
+
+main::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+main::-webkit-scrollbar-thumb {
+  background: #45d85e;
+  border-radius: 10px;
+}
+
+main::-webkit-scrollbar-thumb:hover {
+  background: #2da644;
+}
+
+/* Smooth transitions for menu items */
+.menu-item {
+  transition: all 0.3s ease;
+}
+
+.menu-item:hover {
+  transform: translateX(2px);
+}
+
+/* Enhanced gradient background */
+.sidebar-gradient {
+  background: linear-gradient(180deg, #45d85e 0%, #3bc54a 50%, #1f4926 100%);
+}
+
+.carousel .control-arrow {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+}
+
+.carousel .control-arrow:hover {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.carousel .control-next.control-arrow:before,
+.carousel .control-prev.control-arrow:before {
+  color: white;
+  font-size: 24px;
+}
