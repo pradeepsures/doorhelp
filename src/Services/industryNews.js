@@ -29,6 +29,23 @@ export const getIndustryNewsList = async ({
   return res.json();
 };
 
+//create industry news
+export const createIndustryNews = async (formData) => {
+  const response = await fetch(`${BASE_URL}/api/admin/industry-news`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+    body: formData,           // FormData with files + text fields
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to create news");
+  }
+
+  return response.json();
+};
+
 // GET BY ID
 export const getIndustryNewsById = async (id) => {
   const res = await fetch(
@@ -45,6 +62,25 @@ export const getIndustryNewsById = async (id) => {
 
   return res.json();
 };
+
+// UPDATE BY ID (FIXED)
+export const updateIndustryNewsById = async (id, payload) => {
+  const res = await fetch(
+    `${BASE_URL}/api/admin/industry-news/${id}`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+      body: payload, 
+    }
+  );
+
+  if (!res.ok) throw new Error("Failed to update industry news");
+
+  return res.json();
+};
+
 
 // DELETE
 export const deleteIndustryNews = async (id) => {
