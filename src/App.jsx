@@ -18,7 +18,23 @@ import CreateUser from "./Pages/User/CreateUser";
 import UpdateUser from "./Pages/User/UpdateUser";
 import UserLog from "./Pages/User/UserLog";
 import ViewUserLog from "./Pages/User/ViewUserLog";
-import IndustryNewsList from "./Pages/industryNews/getIndustryNewsList";
+import IndustryNewsList from "./Pages/industryNews/IndustryNewsList";
+import IndustryNewsView from "./Pages/industryNews/IndustryNewsDetails";
+import IndustryNewsCreate from "./Pages/industryNews/IndustryNewsCreate";
+import LatestNoticesList from "./Pages/LatestNotice/LatestNoticeList";
+import LatestNoticesView from "./Pages/LatestNotice/LatestNoticesDetails";
+import LatestNoticeCreate from "./Pages/LatestNotice/LatestNoticeCreate";
+import IndustryNewsEdit from "./Pages/industryNews/IndustryNewsUpdate";
+import LatestNoticeUpdate from "./Pages/LatestNotice/LatestNoticeUpdate";
+import AssociationsList from "./Pages/Association/AssociationList";
+import MembersList from "./Pages/Member/MemberList";
+import AssociationDetails from "./Pages/Association/AssociationDetails";
+import CreateAssociation from "./Pages/Association/AssociationCreate";
+import MemberDetailsPage from "./Pages/Member/MemberDetails";
+import CreateMember from "./Pages/Member/MemberCreate";
+import UpdateAssociation from "./Pages/Association/AssociationUpdate";
+import EditMember from "./Pages/Member/MemberUpdate";
+
 // import UserList from "./Pages/User/UserList";
 
 // import PageNotFond from "./Pages/notFound/PageNotFond";
@@ -47,14 +63,42 @@ const router = createBrowserRouter([
       path: "industryNews",
       children: [
         { path: "list", element: <IndustryNewsList /> },
-        // { path: "view/:id", element: <IndustryNewsView /> },
-        // { path: "edit/:id", element: <IndustryNewsEdit /> },
+        { path: "create", element: <IndustryNewsCreate /> },
+        { path: "view/:id", element: <IndustryNewsView /> },
+      { path:"edit/:id", element:<IndustryNewsEdit />  },
       ],
     },
 
-   
-     
-      
+    {
+  path: "latest-notices",
+  children: [
+    { path: "list", element: <LatestNoticesList /> },
+    { path: "view/:id", element: <LatestNoticesView /> },
+    { path: "create", element: <LatestNoticeCreate /> },
+    { path:"edit/:id", element:<LatestNoticeUpdate /> }
+  ],
+},
+
+{
+  path: "association",
+  children: [
+       { path: "list", element: <AssociationsList /> },
+    { path : "create", element: <CreateAssociation /> },     
+    { path : "view/:id", element: <AssociationDetails /> },
+    { path : "edit/:id", element: <UpdateAssociation /> }, 
+  ]
+},
+
+{
+  path: "members",
+  children: [
+    { path: "list", element: <MembersList /> }, 
+    { path: "view/:id", element: <MemberDetailsPage /> },
+    { path : "create", element: <CreateMember /> },
+    { path : "edit/:id", element: <EditMember />  },
+  ]
+},
+
       //termCondition
       { path: "termCondition", element: <TermConditionList /> },
       { path: "privacyPolicy", element: <PrivacyPolicy /> },
