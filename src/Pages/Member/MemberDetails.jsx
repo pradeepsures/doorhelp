@@ -122,7 +122,7 @@ const MemberDetailsPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x">
           {/* LEFT COLUMN - Personal Information (including contact) */}
           <div>
-            <div className="bg-black text-white p-4 font-semibold text-lg">
+            <div className="bg-primary-gradient text-white p-4 font-semibold text-lg">
               Personal Information
             </div>
             <Row label="Full Name" value={fullName} />
@@ -149,7 +149,7 @@ const MemberDetailsPage = () => {
 
           {/* RIGHT COLUMN - Organization Information */}
           <div>
-            <div className="bg-black text-white p-4 font-semibold text-lg">
+            <div className="bg-primary-gradient text-white p-4 font-semibold text-lg">
               Organization Details
             </div>
             <Row label="Organization Name" value={organization.name} />

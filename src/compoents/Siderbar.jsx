@@ -297,7 +297,14 @@ import { RiArrowDropDownLine } from "react-icons/ri";
 import { GiNewspaper } from "react-icons/gi";
 import { PiFlagBannerFill } from "react-icons/pi";
 import { IoNotifications } from "react-icons/io5";
+import { RiFileList3Fill } from "react-icons/ri";
 import { MdRememberMe } from "react-icons/md";
+import { FaClipboardCheck } from "react-icons/fa";
+import { FiUser } from "react-icons/fi";
+import { LuGalleryThumbnails } from "react-icons/lu";
+import { MdEmojiEvents } from "react-icons/md";
+import { GiVerticalBanner } from "react-icons/gi";
+
 
 import {
   IoDocumentTextOutline,
@@ -342,6 +349,48 @@ const Sidebar = () => {
       dropdownIcon: RiArrowDropDownLine,
       subMenus: [{ name: "Latest Notice", link: "/home/latest-notices/list" }],
     },
+
+      {
+      name: "Plans",
+      icon: RiFileList3Fill,
+      dropdownIcon: RiArrowDropDownLine,
+      subMenus: [{ name: "All Plans", link: "/home/plan/list" }],
+    },
+
+      {
+      name: "AssignPlan",
+      icon: FaClipboardCheck,
+      dropdownIcon: RiArrowDropDownLine,
+      subMenus: [{ name: "Assigned Plan", link: "/home/assignedPlan/list" }],
+    },
+
+      {
+      name: "Gallery",
+      icon: LuGalleryThumbnails,
+      dropdownIcon: RiArrowDropDownLine,
+      subMenus: [{ name: "Gallery", link: "/home/gallery/list" }],
+    },
+
+       {
+      name: "Event",
+      icon: MdEmojiEvents,
+      dropdownIcon: RiArrowDropDownLine,
+      subMenus: [{ name: "Event", link: "/home/event/list" }],
+    },
+
+      {
+      name: "Banner",
+      icon: GiVerticalBanner,
+      dropdownIcon: RiArrowDropDownLine,
+      subMenus: [{ name: "Banner", link: "/home/banner/list" }],
+    },
+
+    //   {
+    //   name: "Leadership",
+    //   icon: FiUser,
+    //   dropdownIcon: RiArrowDropDownLine,
+    //   subMenus: [{ name: "Leadership List", link: "/home/leadership/list" }],
+    // },
 
     {
       name: "Term Condition",

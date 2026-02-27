@@ -51,9 +51,9 @@ const Navbar = () => {
 
         {/* Right Section */}
         <div className="flex items-center gap-4">
-          <div className="text-3xl p-2 bg-white text-blue-700 rounded-full shadow">
+          {/* <div className="text-3xl p-2 bg-white text-blue-700 rounded-full shadow">
             <IoMdNotificationsOutline />
-          </div>
+          </div> */}
 
           <Profilelogo />
         </div>

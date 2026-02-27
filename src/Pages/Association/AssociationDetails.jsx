@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { FiArrowLeft } from "react-icons/fi";
-import { FaDownload } from "react-icons/fa";
+import { FiArrowLeft, FiEdit2, FiTrash2, FiX } from "react-icons/fi";
+import { FaEdit } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { getAssociationDetails } from "../../Services/association";
+import {
+  updateLeadership,
+  deleteLeadership,
+} from "../../Services/leadership";
 
 const FILE_BASE_URL = "http://159.89.146.245:7007";
 
@@ -14,43 +18,83 @@ export default function AssociationDetails() {
   const [association, setAssociation] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const res = await getAssociationDetails(id);
-        if (res.success) {
-          setAssociation(res.data);
-        } else {
-          throw new Error("Failed to load details");
-        }
-      } catch (err) {
-        toast.error("Failed to load association details");
-        console.error(err);
-      } finally {
-        setLoading(false);
+  const [editLeader, setEditLeader] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
+
+  const [formData, setFormData] = useState({
+    name: "",
+    designation: "",
+    profileImg: null,
+  });
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const res = await getAssociationDetails(id);
+      if (res.success) {
+        setAssociation(res.data);
       }
-    };
+    } catch (err) {
+      toast.error("Failed to load association details");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, [id]);
+
+  const handleDelete = async (leaderId) => {
+    if (!window.confirm("Are you sure you want to delete this leader?"))
+      return;
+
+    try {
+      await deleteLeadership(leaderId);
+      toast.success("Leadership deleted");
+      fetchData();
+    } catch {
+      toast.error("Delete failed");
+    }
+  };
+
+  const handleEditClick = (leader) => {
+    setEditLeader(leader);
+    setPreviewImage(null);
+    setFormData({
+      name: leader.name,
+      designation: leader.designation,
+      profileImg: null,
+    });
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("designation", formData.designation);
+
+    if (formData.profileImg) {
+      data.append("profileImg", formData.profileImg);
+    }
+
+    try {
+      await updateLeadership(editLeader._id, data);
+      toast.success("Leadership updated");
+      setEditLeader(null);
+      fetchData();
+    } catch {
+      toast.error("Update failed");
+    }
+  };
 
   if (loading) {
     return <p className="p-6 text-center text-lg">Loading...</p>;
   }
 
   if (!association) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6">
-        <div className="text-6xl mb-4">⚠️</div>
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">Association Not Found</h2>
-        <button
-          onClick={() => navigate(-1)}
-          className="mt-6 px-6 py-3 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition"
-        >
-          Go Back
-        </button>
-      </div>
-    );
+    return <div className="p-6 text-center">Association Not Found</div>;
   }
 
   const {
@@ -73,181 +117,236 @@ export default function AssociationDetails() {
     verificationStatus,
     isActive,
     createdAt,
+    leaderships = [],
   } = association;
 
   const Row = ({ label, value, children }) => (
-    <div className="flex border-b last:border-b-0 md:border-r text-[14px] items-center min-h-[40px]">
-      <div className="w-1/3 md:w-1/3 bg-gray-100 p-3 font-medium text-gray-800 border-r">
+    <div className="flex border-b last:border-b-0 md:border-r text-sm">
+      <div className="w-1/3 bg-gray-100 px-3 py-2 font-medium border-r">
         {label}
       </div>
-      <div className="w-2/3 md:w-2/3 p-3 flex items-center gap-3">
-        {children || (value || "—")}
+      <div className="w-2/3 px-3 py-2">
+        {children || value || "—"}
       </div>
     </div>
   );
 
   return (
     <div className="p-6">
-      <h3 className="text-2xl font-semibold mb-4">Association Details</h3>
 
-      {/* Back + Edit Buttons */}
+      {/* ================= HEADER ================= */}
       <div className="flex justify-between mb-6">
+        <h2 className="text-2xl font-semibold">Association Details</h2>
         <button
           onClick={() => navigate(-1)}
-          className="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 shadow-sm transition"
+          className="px-4 py-2 bg-blue-600 text-white rounded flex items-center gap-2"
         >
-          <FiArrowLeft size={18} /> Back
+          <FiArrowLeft size={16} /> Back
         </button>
-
-        {/* Uncomment when ready */}
-        {/* <button
-          onClick={() => navigate(`/home/association/edit/${id}`)}
-          className="px-5 py-2.5 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 shadow-sm transition"
-        >
-          Edit
-        </button> */}
       </div>
 
-      {/* Main Details Grid */}
+      {/* ================= MAIN DETAILS ================= */}
       <div className="border rounded-lg overflow-hidden shadow bg-white">
         <div className="grid grid-cols-1 md:grid-cols-2">
-          {/* Profile Image */}
+
           <Row label="Profile Image">
-            {profileImage ? (
-              <div className="flex items-center gap-4">
-                <img
-                  src={`${FILE_BASE_URL}/${profileImage}`}
-                  alt="Profile"
-                  className="w-16 h-16 object-cover rounded-full border border-gray-300 cursor-pointer hover:scale-105 transition-transform shadow-sm"
-                  onClick={() => window.open(`${FILE_BASE_URL}/${profileImage}`, "_blank", "noopener,noreferrer")}
-                  onError={(e) => (e.target.src = "https://via.placeholder.com/64?text=?")}
-                />
-                {/* <button
-                  onClick={() => {
-                    const link = document.createElement("a");
-                    link.href = `${FILE_BASE_URL}/${profileImage}`;
-                    link.download = profileImage.split("/").pop() || "profile.jpg";
-                    link.click();
-                  }}
-                  className="text-blue-600 hover:text-blue-800 transition"
-                  title="Download Profile Image"
-                >
-                  <FaDownload size={16} />
-                </button> */}
-              </div>
-            ) : (
-              <span className="text-gray-500 italic">Not Uploaded</span>
+            {profileImage && (
+              <img
+                src={`${FILE_BASE_URL}/${profileImage}`}
+                className="w-16 h-16 rounded-full border object-cover"
+                alt=""
+              />
             )}
           </Row>
 
-          <Row label="Association Name" value={associationName || "N/A"} />
-          <Row label="Govt. Reg. Number" value={governmentRegistrationNumber || "N/A"} />
-          <Row label="Year of Formation" value={yearOfFormation || "N/A"} />
-          <Row label="Registration Type" value={registrationCertificateType || "N/A"} />
-          <Row label="President / Secretary" value={presidentOrSecretary || "N/A"} />
-          <Row label="Phone" value={`${countryCode || ""} ${phoneNumber || "N/A"}`} />
-          <Row label="Email" value={email || "N/A"} />
-          <Row label="Full Address" value={fullAddress || "N/A"} />
-          <Row label="City" value={city || "N/A"} />
-          <Row label="State" value={state || "N/A"} />
-          <Row label="Pin Code" value={pinCode || "N/A"} />
-          <Row
-            label="Status"
-            value={
-              <span className={`font-medium ${isActive ? "text-green-600" : "text-red-600"}`}>
-                {isActive ? "Active" : "Inactive"}
-              </span>
-            }
-          />
-          <Row
-            label="Verification Status"
-            value={
-              <span className={`font-medium ${verificationStatus === "Verified" ? "text-green-600" : "text-orange-600"}`}>
-                {verificationStatus || "Pending"}
-              </span>
-            }
-          />
-          <Row label="Verified By" value={verifiedBy || "Not Verified"} />
+          <Row label="Association Name" value={associationName} />
+          <Row label="Govt Reg Number" value={governmentRegistrationNumber} />
+          <Row label="Year of Formation" value={yearOfFormation} />
+          <Row label="Registration Type" value={registrationCertificateType} />
+          <Row label="President / Secretary" value={presidentOrSecretary} />
+          <Row label="Phone" value={`${countryCode} ${phoneNumber}`} />
+          <Row label="Email" value={email} />
+          <Row label="Address" value={fullAddress} />
+          <Row label="City" value={city} />
+          <Row label="State" value={state} />
+          <Row label="Pin Code" value={pinCode} />
+          <Row label="Verification Status" value={verificationStatus} />
+          <Row label="Verified By" value={verifiedBy} />
           <Row
             label="Verified At"
             value={
               verifiedAt
-                ? new Date(verifiedAt).toLocaleString("en-IN", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                    hour: "numeric",
-                    minute: "2-digit",
-                  })
+                ? new Date(verifiedAt).toLocaleString()
                 : "Not Verified"
             }
           />
           <Row
             label="Created At"
-            value={new Date(createdAt).toLocaleString("en-IN", {
-              day: "numeric",
-              month: "short",
-              year: "numeric",
-              hour: "numeric",
-              minute: "2-digit",
-            })}
+            value={new Date(createdAt).toLocaleString()}
           />
 
-          {/* Registration Documents – Each in its own Row */}
-          {registrationDocument.length > 0 ? (
-            registrationDocument.map((doc, index) => {
-              const normalizedPath = doc.replace(/\\/g, "/");
-              const fullUrl = `${FILE_BASE_URL}/${normalizedPath}`;
-              const fileName = normalizedPath.split("/").pop() || `document-${index + 1}`;
-              const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(fileName);
-
-              return (
-                <Row key={index} label={`Registration Document ${index + 1}`}>
-                  <div className="flex items-center gap-4">
-                    {isImage ? (
-                      <img
-                        src={fullUrl}
-                        alt={`Document ${index + 1}`}
-                        className="w-20 h-20 object-cover rounded border border-gray-300 cursor-pointer hover:scale-105 transition-transform shadow-sm"
-                        onClick={() => window.open(fullUrl, "_blank", "noopener,noreferrer")}
-                        onError={(e) => (e.target.src = "https://via.placeholder.com/80?text=Error")}
-                      />
-                    ) : (
-                      <div className="w-20 h-20 bg-gray-100 rounded border flex items-center justify-center text-xs text-gray-500">
-                        File
-                      </div>
-                    )}
-
-                    {/* <div className="flex-1 min-w-0">
-                      <div className="text-sm font-medium truncate" title={fileName}>
-                        {fileName}
-                      </div>
-                    </div> */}
-{/* 
-                    <button
-                      onClick={() => {
-                        const link = document.createElement("a");
-                        link.href = fullUrl;
-                        link.download = fileName;
-                        link.click();
-                      }}
-                      className="text-blue-600 hover:text-blue-800 transition flex items-center gap-1"
-                      title="Download document"
-                    >
-                      <FaDownload size={14} />
-                      <span className="text-xs">Download</span>
-                    </button> */}
-                  </div>
-                </Row>
-              );
-            })
-          ) : (
-            <Row label="Registration Documents">
-              <span className="text-gray-500 italic">No documents uploaded</span>
+          {registrationDocument.map((doc, i) => (
+            <Row key={i} label={`Document ${i + 1}`}>
+              <img
+                src={`${FILE_BASE_URL}/${doc}`}
+                className="w-16 h-16 rounded-full border object-cover"
+                alt=""
+              />
             </Row>
-          )}
+          ))}
         </div>
       </div>
+
+      {/* ================= LEADERSHIP ================= */}
+      <div className="mt-10">
+        <h3 className="text-xl font-semibold mb-6">Leadership Members</h3>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {leaderships.map((leader) => {
+            const imgUrl = `${FILE_BASE_URL}/${leader.profileImg}`;
+
+            return (
+              <div
+                key={leader._id}
+                className="bg-white border rounded-lg p-4 text-center relative"
+              >
+                <div className="absolute top-2 right-2 flex gap-2">
+                  <button
+                    onClick={() => handleEditClick(leader)}
+                    className="text-blue-600"
+                  >
+                    <FaEdit size={14} />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(leader._id)}
+                    className="text-red-600"
+                  >
+                    <FiTrash2 size={14} />
+                  </button>
+                </div>
+
+                <img
+                  src={imgUrl}
+                  className="w-16 h-16 rounded-full mx-auto object-cover border"
+                  alt=""
+                />
+
+                <h4 className="mt-2 font-semibold text-sm">
+                  {leader.name}
+                </h4>
+
+                <p className="text-xs text-indigo-600">
+                  {leader.designation}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ================= EDIT MODAL ================= */}
+      {editLeader && (
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+          <div className="bg-white w-full max-w-md rounded-lg p-6 relative">
+            <button
+              onClick={() => setEditLeader(null)}
+              className="absolute top-3 right-3"
+            >
+              <FiX />
+            </button>
+
+            <h3 className="text-lg font-semibold mb-4">
+              Update Leadership
+            </h3>
+
+            <form onSubmit={handleUpdate} className="space-y-4">
+
+              <input
+                type="text"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                placeholder="Name"
+                className="w-full border rounded px-3 py-2"
+                required
+              />
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Designation</label>
+                <select
+                  name="designation"
+                  value={formData.designation}
+                  onChange={(e) =>
+                    setFormData({ ...formData, designation: e.target.value })
+                  }
+                  className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-indigo-500"
+                  required
+                >
+                  <option value="">Select Designation</option>
+                  <option value="President">President</option>
+                  <option value="Vice-President">Vice-President</option>
+                  <option value="Secretary">Secretary</option>
+                  <option value="Treasurer">Treasurer</option>
+                </select>
+              </div>
+
+              {/* <input
+                type="text"
+                value={formData.designation}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    designation: e.target.value,
+                  })
+                }
+                placeholder="Designation"
+                className="w-full border rounded px-3 py-2"
+                required
+              /> */}
+
+              {/* OLD IMAGE */}
+              <div>
+                <p className="text-sm mb-1">Current Image</p>
+                <img
+                  src={`${FILE_BASE_URL}/${editLeader.profileImg}`}
+                  className="w-16 h-16 rounded-full border"
+                  alt=""
+                />
+              </div>
+
+              {/* NEW IMAGE */}
+              <input
+                type="file"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  setFormData({ ...formData, profileImg: file });
+                  setPreviewImage(URL.createObjectURL(file));
+                }}
+              />
+
+              {/* PREVIEW */}
+              {previewImage && (
+                <div>
+                  <p className="text-sm mt-2">New Preview</p>
+                  <img
+                    src={previewImage}
+                    className="w-16 h-16 rounded-full border"
+                    alt=""
+                  />
+                </div>
+              )}
+
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-2 rounded"
+              >
+                Update Leadership
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
