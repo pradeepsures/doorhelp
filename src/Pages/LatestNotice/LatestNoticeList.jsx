@@ -117,14 +117,14 @@ export default function LatestNoticesList() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-100">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-14">Sr No</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-32">Image</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider min-w-[220px]">Title</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider min-w-[280px]">Short Description</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-28">PDF</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-28">Popular</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider w-36">Published</th>
-                  <th className="px-6 py-3 text-right text-xs font-semibold text-gray-700 uppercase tracking-wider w-24">Actions</th>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-white bg-primary-gradient uppercase tracking-wider w-14">Sr No</th>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-white bg-primary-gradient uppercase tracking-wider w-32">Image</th>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-white bg-primary-gradient uppercase tracking-wider min-w-[220px]">Title</th>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-white bg-primary-gradient uppercase tracking-wider min-w-[280px]">Short Description</th>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-white bg-primary-gradient uppercase tracking-wider w-28">PDF</th>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-white bg-primary-gradient uppercase tracking-wider w-28">Popular</th>
+                  <th className="px-6 py-3 text-left text-sm font-bold text-white bg-primary-gradient uppercase tracking-wider w-36">Published</th>
+                  <th className="px-6 py-3 text-right text-sm font-bold text-white bg-primary-gradient uppercase tracking-wider w-24">Actions</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">

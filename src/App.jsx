@@ -34,6 +34,22 @@ import MemberDetailsPage from "./Pages/Member/MemberDetails";
 import CreateMember from "./Pages/Member/MemberCreate";
 import UpdateAssociation from "./Pages/Association/AssociationUpdate";
 import EditMember from "./Pages/Member/MemberUpdate";
+import PlanList from "./Pages/Plan/AllPlanList";
+import PlanView from "./Pages/Plan/PlanDetails";
+import PlanCreate from "./Pages/Plan/CreatePlan";
+import PlanUpdate from "./Pages/Plan/PlanUpdate";
+import MembershipAssignmentsList from "./Pages/MemberShipAssignedList/AllAssignedList";
+import MembershipAssignmentDetails from "./Pages/MemberShipAssignedList/AssigedMemberShipDetails";
+import GalleryList from "./Pages/Gallery/GalleryList";
+import CreateGallery from "./Pages/Gallery/CreateGallery";
+import ViewGallery from "./Pages/Gallery/GalleryDetails";
+import EditGallery from "./Pages/Gallery/GalleryUpdate";
+import EventList from "./Pages/Event/EventList";
+import ViewEvent from "./Pages/Event/EventDetails";
+import CreateEvent from "./Pages/Event/EventCreate";
+import UpdateEvent from "./Pages/Event/EventUpdate";
+import BannerList from "./Pages/Banner/BannerList";
+// import LeadershipList from "./Pages/Leadership/Leadership";
 
 // import UserList from "./Pages/User/UserList";
 
@@ -96,6 +112,66 @@ const router = createBrowserRouter([
     { path: "view/:id", element: <MemberDetailsPage /> },
     { path : "create", element: <CreateMember /> },
     { path : "edit/:id", element: <EditMember />  },
+  ]
+},
+
+{
+  path: "plan",
+  children: [
+    { path: "list", element: <PlanList /> }, 
+    { path: "view/:id", element: <PlanView /> },
+    { path : "create", element: <PlanCreate /> },
+    { path : "edit/:id", element: <PlanUpdate />  },
+  ]
+},
+
+{
+  path: "assignedPlan",
+  children: [
+    { path: "list", element: <MembershipAssignmentsList /> }, 
+    { path: "view/:id", element: <MembershipAssignmentDetails /> },
+    // { path : "create", element: <PlanCreate /> },
+    // { path : "edit/:id", element: <PlanUpdate />  },
+  ]
+},
+
+{
+  path: "gallery",
+  children: [
+    { path: "list", element: <GalleryList /> }, 
+    { path: "view/:id", element: <ViewGallery /> },
+    { path : "create", element: <CreateGallery /> },
+    { path : "edit/:id", element: <EditGallery />  },
+  ]
+},
+
+{
+  path: "event",
+  children: [
+    { path: "list", element: <EventList /> }, 
+    { path: "view/:id", element: <ViewEvent /> },
+    { path : "create", element: <CreateEvent /> },
+    { path : "edit/:id", element: <UpdateEvent />  },
+  ]
+},
+
+{
+  path: "banner",
+  children: [
+    { path: "list", element: <BannerList /> }, 
+    // { path: "view/:id", element: <ViewEvent /> },
+    // { path : "create", element: <CreateEvent /> },
+    // { path : "edit/:id", element: <UpdateEvent />  },
+  ]
+},
+
+{
+  path: "leadership",
+  children: [
+    // { path: "list", element: <LeadershipList /> }, 
+    // { path: "view/:id", element: <MembershipAssignmentDetails /> },
+    // { path : "create", element: <PlanCreate /> },
+    // { path : "edit/:id", element: <PlanUpdate />  },
   ]
 },
 
