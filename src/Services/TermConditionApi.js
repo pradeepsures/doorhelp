@@ -23,3 +23,22 @@ export const getAdminInfo = async () => {
 
   return res.json();
 };
+
+// ✅ Common Update API (dynamic field)
+export const updateAdminPolicy = async (id, payload) => {
+  const res = await fetch(
+    `${BASE_URL}/api/admin/update-info/${id}`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload), // 🔥 dynamic
+    }
+  );
+
+  if (!res.ok) throw new Error("Failed to update");
+
+  return res.json();
+};

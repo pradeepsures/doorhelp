@@ -402,11 +402,11 @@ const Sidebar = () => {
       link: "/home/privacyPolicy",
       icon: IoDocumentLockOutline,
     },
-    {
-      name: "AboutUs",
-      link: "/home/aboutUs",
-      icon: IoDocumentLockOutline,
-    },
+    // {
+    //   name: "AboutUs",
+    //   link: "/home/aboutUs",
+    //   icon: IoDocumentLockOutline,
+    // },
   ];
 
   const filteredMenus = menus
