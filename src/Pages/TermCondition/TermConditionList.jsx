@@ -65,7 +65,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import DOMPurify from "dompurify";
 
-import { getAdminInfo, updateTerms } from "../../Services/TermConditionApi";
+import { getAdminInfo, updateAdminPolicy } from "../../Services/TermConditionApi";
 
 const ADMIN_ID = "698064f87234456b88576678";
 
@@ -95,17 +95,33 @@ const TermConditionEditor = () => {
 
   // ✅ Update
   const handleUpdate = async () => {
-    try {
-      setSaving(true);
-      await updateTerms(ADMIN_ID, tempContent);
-      setContent(tempContent);
-      setIsEditing(false);
-    } catch (err) {
-      alert(err.message);
-    } finally {
-      setSaving(false);
-    }
-  };
+  try {
+    setSaving(true);
+
+    await updateAdminPolicy(ADMIN_ID, {
+      termAndConditions: tempContent,
+    });
+
+    setContent(tempContent);
+    setIsEditing(false);
+  } catch (err) {
+    alert(err.message);
+  } finally {
+    setSaving(false);
+  }
+};
+  // const handleUpdate = async () => {
+  //   try {
+  //     setSaving(true);
+  //     await updateAdminPolicy(ADMIN_ID, tempContent);
+  //     setContent(tempContent);
+  //     setIsEditing(false);
+  //   } catch (err) {
+  //     alert(err.message);
+  //   } finally {
+  //     setSaving(false);
+  //   }
+  // };
 
   // ✅ Cancel Edit
   const handleCancel = () => {
