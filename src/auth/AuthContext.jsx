@@ -1,6 +1,6 @@
 // src/context/AuthContext.js
 import React, { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
+import axiosInstance from "../api/axios";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const AuthContext = createContext();
@@ -10,59 +10,27 @@ export const AuthProvider = ({ children }) => {
     token: localStorage.getItem("token") || null,
     user: JSON.parse(localStorage.getItem("user") || "null"),
   });
-  const [loading, setLoading] = useState(true);
-
-  // useEffect(() => {
-  //   const fetchUserProfile = async () => {
-  //     if (!auth.token) {
-  //       setAuth((prev) => ({ ...prev, user: null }));
-  //       localStorage.removeItem("user");
-  //       setLoading(false);
-  //       return;
-  //     }
-
-  //     // If we already have user data and token, no need to fetch again
-  //     if (auth.user && auth.token) {
-  //       setLoading(false);
-  //       return;
-  //     }
-
-  //     try {
-  //       const res = await axios.get(`${BASE_URL}/api/admin/profile`, {
-  //         headers: { Authorization: `Bearer ${auth.token}` },
-  //       });
-  //       if (res.data.status) {
-  //         const userData = res.data.data.user;
-  //         localStorage.setItem("user", JSON.stringify(userData));
-  //         setAuth((prev) => ({ ...prev, user: userData }));
-  //       }
-  //     } catch (error) {
-  //       console.error("Failed to fetch user profile", error);
-  //       localStorage.removeItem("token");
-  //       localStorage.removeItem("user");
-  //       setAuth({ token: null, user: null });
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchUserProfile();
-  // }, [auth.token, auth.user]);
+  const [loading, setLoading] = useState(false);
 
   const login = async ({ email, password }) => {
     try {
-      const response = await axios.post(`${BASE_URL}/api/admin/login-admin`, {
+      // Use the custom axiosInstance for consistency, though plain axios could work here since we don't have a token yet
+      const response = await axiosInstance.post(`/api/v1/admin/auth/login`, {
         email,
         password,
       });
       console.log("Login response:", response.data);
-      const { token, user } = response.data;
-      if (token) {
-        localStorage.setItem("token", token);
-        if (user) {
-          localStorage.setItem("user", JSON.stringify(user));
+      const { accessToken, refreshToken, admin } = response.data?.data || {};
+
+      if (accessToken) {
+        localStorage.setItem("token", accessToken);
+        if (refreshToken) {
+          localStorage.setItem("refreshToken", refreshToken);
         }
-        setAuth({ token, user: user || null }); // profile loads in useEffect if not provided
+        if (admin) {
+          localStorage.setItem("user", JSON.stringify(admin));
+        }
+        setAuth({ token: accessToken, user: admin || null });
         return { success: true };
       } else {
         throw new Error("Token not found in response");
@@ -72,8 +40,10 @@ export const AuthProvider = ({ children }) => {
       return { success: false, error: error.message };
     }
   };
+
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
     localStorage.removeItem("user");
     setAuth({ token: null, user: null });
   };

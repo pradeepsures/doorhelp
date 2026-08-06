@@ -48,7 +48,7 @@ export default function BasicMenu() {
   const user = auth?.user;
   console.log("user", user);
   const profileImage = user?.profileImage
-    ? `${BASE_URL}/${user.profileImage}`
+    ? `${BASE_URL}${user.profileImage}`
     : profileFallback;
   console.log("profileImage", profileImage);
 

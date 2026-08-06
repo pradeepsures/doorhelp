@@ -1,293 +1,129 @@
-// import React, { useEffect, useState } from "react";
-// import { getDashboardStats } from "../../Services/dashboard";
-// import {
-//   FaTruck,
-//   FaRecycle,
-//   FaUsers,
-//   FaMapMarkerAlt,
-//   FaMoneyBillWave,
-//   FaStore,
-//   FaTrash,
-// } from "react-icons/fa";
-// import {
-//   BarChart,
-//   Bar,
-//   XAxis,
-//   YAxis,
-//   Tooltip,
-//   ResponsiveContainer,
-// } from "recharts";
-
-// const data = [
-//   { name: "Mon", Payments: 40 },
-//   { name: "Tue", Payments: 30 },
-//   { name: "Wed", Payments: 50 },
-//   { name: "Thu", Payments: 70 },
-//   { name: "Fri", Payments: 60 },
-//   { name: "Sat", Payments: 90 },
-//   { name: "Sun", Payments: 100 },
-// ];
-
-// // 🔹 Reusable Stat Card Component
-// const StatCard = ({
-//   icon: Icon,
-//   title,
-//   value,
-//   color,
-//   gradientFrom,
-//   gradientTo,
-// }) => (
-//   <div className="relative group overflow-hidden shadow-xl rounded-2xl bg-white p-6 flex items-center gap-5 hover:shadow-2xl transition duration-300">
-//     <div
-//       className={`flex items-center justify-center w-16 h-16 rounded-full text-white shadow-md group-hover:scale-110 transition-transform duration-300`}
-//       style={{ backgroundColor: color }}
-//     >
-//       <Icon className="text-3xl" />
-//     </div>
-//     <div>
-//       <h2 className="text-lg font-semibold text-gray-700 group-hover:text-green-700 transition-colors">
-//         {title}
-//       </h2>
-//       <p className="text-3xl font-extrabold text-green-800 mt-1 group-hover:scale-110 transition-transform duration-300">
-//         {value}
-//       </p>
-//     </div>
-//     {/* Decorative gradient blur */}
-//     <div
-//       className="absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-30 blur-2xl"
-//       style={{
-//         background: `linear-gradient(to right, ${gradientFrom}, ${gradientTo})`,
-//       }}
-//     ></div>
-//     <div
-//       className="absolute -bottom-6 -left-6 w-24 h-24 rounded-full opacity-20 blur-3xl"
-//       style={{
-//         background: `linear-gradient(to right, ${gradientFrom}, ${gradientTo})`,
-//       }}
-//     ></div>
-//   </div>
-// );
-
-// export default function WasteDashboard() {
-//   return (
-//     <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 p-6">
-//       {/* Header */}
-//       <div className="flex justify-between items-center mb-8">
-//         <h1 className="text-3xl font-bold text-green-800">
-//           Bharat Metal Grid Dashboard
-//         </h1>
-//       </div>
-
-//       {/* Stats */}
-//       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-//         <StatCard
-//           icon={FaUsers}
-//           title="Total Members"
-//           value="1,220"
-//           color="#16a34a"
-//           gradientFrom="#22c55e"
-//           gradientTo="#86efac"
-//         />
-//         <StatCard
-//           icon={FaStore}
-//           title="Total Associations"
-//           value="120"
-//           color="#f97316"
-//           gradientFrom="#fb923c"
-//           gradientTo="#fed7aa"
-//         />
-//         <StatCard
-//           icon={FaMoneyBillWave}
-//           title="Payment  Collections"
-//           value="₹10,020"
-//           color="#eab308"
-//           gradientFrom="#facc15"
-//           gradientTo="#fef08a"
-//         />
-//         <StatCard
-//           icon={FaTruck}
-//           title="Payment Due"
-//           value="24"
-//           color="#16a34a"
-//           gradientFrom="#22c55e"
-//           gradientTo="#bbf7d0"
-//         />
-//       </div>
-
-//       {/* Chart */}
-//       <div className="shadow-lg rounded-2xl bg-white p-6">
-//         <h2 className="text-xl font-semibold mb-4 text-green-800">
-//           Payment Collection
-//         </h2>
-//         <ResponsiveContainer width="100%" height={300}>
-//           <BarChart data={data}>
-//             <XAxis dataKey="name" />
-//             <YAxis />
-//             <Tooltip />
-//             <Bar dataKey="Payments" fill="#16a34a" radius={[8, 8, 0, 0]} />
-//           </BarChart>
-//         </ResponsiveContainer>
-//       </div>
-//     </div>
-//   );
-// }
-
-
-import React, { useEffect, useState } from "react";
-import { getDashboardStats } from "../../Services/dashboard";
-import {
-  FaTruck,
-  FaRecycle,
-  FaUsers,
-  FaMapMarkerAlt,
-  FaMoneyBillWave,
-  FaStore,
-  FaTrash,
-} from "react-icons/fa";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
+import React from "react";
+import { FiUsers, FiBriefcase, FiDollarSign, FiTrendingUp } from "react-icons/fi";
+import { 
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
 } from "recharts";
+import { motion } from "framer-motion";
 
-const data = [
-  { name: "Mon", Payments: 40 },
-  { name: "Tue", Payments: 30 },
-  { name: "Wed", Payments: 50 },
-  { name: "Thu", Payments: 70 },
-  { name: "Fri", Payments: 60 },
-  { name: "Sat", Payments: 90 },
-  { name: "Sun", Payments: 100 },
+const earningData = [
+  { day: "Mon", earnings: 4000 },
+  { day: "Tue", earnings: 5500 },
+  { day: "Wed", earnings: 3200 },
+  { day: "Thu", earnings: 6800 },
+  { day: "Fri", earnings: 7100 },
+  { day: "Sat", earnings: 8500 },
+  { day: "Sun", earnings: 9300 },
 ];
 
-// 🔹 Reusable Stat Card Component
-const StatCard = ({
-  icon: Icon,
-  title,
-  value,
-  color,
-  gradientFrom,
-  gradientTo,
-}) => (
-  <div className="relative group overflow-hidden shadow-xl rounded-2xl bg-white p-6 flex items-center gap-5 hover:shadow-2xl transition duration-300">
-    <div
-      className="flex items-center justify-center w-16 h-16 rounded-full text-white shadow-md group-hover:scale-110 transition-transform duration-300"
-      style={{ backgroundColor: color }}
-    >
-      <Icon className="text-3xl" />
-    </div>
-    <div>
-      <h2 className="text-lg font-semibold text-gray-700 group-hover:text-green-700 transition-colors">
-        {title}
-      </h2>
-      <p className="text-3xl font-extrabold text-green-800 mt-1 group-hover:scale-110 transition-transform duration-300">
-        {value}
-      </p>
-    </div>
+const stats = [
+  { title: "Total Users", value: "12,450", icon: FiUsers, color: "bg-blue-100 text-blue-600" },
+  { title: "Total Partners", value: "3,820", icon: FiBriefcase, color: "bg-[#0D877F]/20 text-[#0D877F]" },
+  { title: "Total Earnings", value: "₹4,25,000", icon: FiDollarSign, color: "bg-yellow-100 text-yellow-600" },
+  { title: "Active Bookings", value: "842", icon: FiTrendingUp, color: "bg-purple-100 text-purple-600" },
+];
 
-    <div
-      className="absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-30 blur-2xl"
-      style={{
-        background: `linear-gradient(to right, ${gradientFrom}, ${gradientTo})`,
-      }}
-    ></div>
-    <div
-      className="absolute -bottom-6 -left-6 w-24 h-24 rounded-full opacity-20 blur-3xl"
-      style={{
-        background: `linear-gradient(to right, ${gradientFrom}, ${gradientTo})`,
-      }}
-    ></div>
-  </div>
-);
-
-export default function WasteDashboard() {
-  const [stats, setStats] = useState({
-    activeMembers: 0,
-    activeAssociations: 0,
-  });
-
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchDashboardStats();
-  }, []);
-
-  const fetchDashboardStats = async () => {
-    try {
-      const response = await getDashboardStats();
-
-      if (response.success) {
-        setStats(response.data);
-      }
-    } catch (error) {
-      console.error("Dashboard API Error:", error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+const Dashboard = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100 p-6">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-green-800">
-          Bharat Metal Grid Dashboard
-        </h1>
-      </div>
+    <div className="min-h-screen bg-gray-50 p-6 w-full">
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="max-w-7xl mx-auto space-y-8"
+      >
+        {/* Header */}
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
+          <p className="text-gray-500 mt-1">Welcome back! Here's a summary of DoorHelp's performance.</p>
+        </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <StatCard
-          icon={FaUsers}
-          title="Total Members"
-          value={ stats.activeMembers}
-          color="#16a34a"
-          gradientFrom="#22c55e"
-          gradientTo="#86efac"
-        />
-        <StatCard
-          icon={FaStore}
-          title="Total Associations"
-          value={ stats.activeAssociations}
-          color="#f97316"
-          gradientFrom="#fb923c"
-          gradientTo="#fed7aa"
-        />
-        <StatCard
-          icon={FaMoneyBillWave}
-          title="Payment  Collections"
-          value="₹10,020"
-          color="#eab308"
-          gradientFrom="#facc15"
-          gradientTo="#fef08a"
-        />
-        <StatCard
-          icon={FaTruck}
-          title="Payment Due"
-          value="24"
-          color="#16a34a"
-          gradientFrom="#22c55e"
-          gradientTo="#bbf7d0"
-        />
-      </div>
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {stats.map((stat, index) => {
+            const Icon = stat.icon;
+            return (
+              <motion.div 
+                key={index}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between transition-transform hover:-translate-y-1 hover:shadow-md cursor-pointer"
+              >
+                <div>
+                  <p className="text-sm font-medium text-gray-500 mb-1">{stat.title}</p>
+                  <h3 className="text-2xl font-bold text-gray-900">{stat.value}</h3>
+                </div>
+                <div className={`p-4 rounded-full ${stat.color}`}>
+                  <Icon size={24} />
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
 
-      {/* Chart */}
-      <div className="shadow-lg rounded-2xl bg-white p-6">
-        <h2 className="text-xl font-semibold mb-4 text-green-800">
-          Payment Collection
-        </h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={data}>
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="Payments" fill="#16a34a" radius={[8, 8, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+        {/* Chart Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100"
+        >
+          <div className="mb-6 flex justify-between items-center">
+            <div>
+              <h2 className="text-xl font-bold text-gray-900">Weekly Earnings</h2>
+              <p className="text-sm text-gray-500">Revenue generated over the last 7 days</p>
+            </div>
+            <select className="bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-[#0D877F] focus:border-[#0D877F] block p-2 outline-none">
+              <option>Last 7 Days</option>
+              <option>This Month</option>
+              <option>This Year</option>
+            </select>
+          </div>
+          
+          <div className="h-[400px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={earningData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="colorEarnings" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#0D877F" stopOpacity={0.4}/>
+                    <stop offset="95%" stopColor="#0D877F" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
+                <XAxis 
+                  dataKey="day" 
+                  axisLine={false} 
+                  tickLine={false} 
+                  tick={{ fill: '#6B7280', fontSize: 14 }}
+                  dy={10}
+                />
+                <YAxis 
+                  axisLine={false} 
+                  tickLine={false} 
+                  tick={{ fill: '#6B7280', fontSize: 14 }}
+                  tickFormatter={(value) => `₹${value}`}
+                  dx={-10}
+                />
+                <Tooltip 
+                  contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)' }}
+                  formatter={(value) => [`₹${value}`, "Earnings"]}
+                  labelStyle={{ fontWeight: 'bold', color: '#374151', marginBottom: '4px' }}
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="earnings" 
+                  stroke="#0D877F" 
+                  strokeWidth={3}
+                  fillOpacity={1} 
+                  fill="url(#colorEarnings)" 
+                  activeDot={{ r: 8, fill: "#0D877F", stroke: "#fff", strokeWidth: 3 }}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
-}
+};
+
+export default Dashboard;

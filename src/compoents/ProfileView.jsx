@@ -10,9 +10,13 @@ import {
   Button,
   CircularProgress,
   Alert,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import profileFallback from "../../src/profilelogo.png";
-import axios from "axios";
+import axiosInstance from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
@@ -22,12 +26,18 @@ const ProfileView = () => {
   const user = auth.user;
   const navigate = useNavigate();
 
-  const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  
   const [formData, setFormData] = useState({
-    currentPassword: "",
-    password: "",
+    name: user?.name || "",
+    email: user?.email || "",
+    newPassword: "",
     confirmPassword: "",
   });
+  const [profileImage, setProfileImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -36,36 +46,55 @@ const ProfileView = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handlePasswordChange = async (e) => {
+  const handleImageChange = (e) => {
+    if (e.target.files[0]) {
+      setProfileImage(e.target.files[0]);
+      setImagePreview(URL.createObjectURL(e.target.files[0]));
+    }
+  };
+
+  const handleProfileUpdate = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
 
-    if (formData.password !== formData.confirmPassword) {
-      setError("New password and confirm password do not match");
-      return;
-    }
-
     try {
       setLoading(true);
-      const response = await axios.patch(
-        `${BASE_URL}/api/admin/updatePassword`,
-        {
-          currentPassword: formData.currentPassword,
-          password: formData.password,
-        },
-        {
-          headers: { Authorization: `Bearer ${auth.token}` },
+      
+      const payload = new FormData();
+      payload.append("name", formData.name);
+      payload.append("email", formData.email);
+      if (profileImage) {
+        payload.append("profileImage", profileImage);
+      }
+      if (formData.newPassword) {
+        if (formData.newPassword !== formData.confirmPassword) {
+           setError("Passwords do not match");
+           setLoading(false);
+           return;
         }
-      );
+        payload.append("password", formData.newPassword);
+      }
 
-      setSuccess("Password changed successfully");
-      setFormData({ currentPassword: "", password: "", confirmPassword: "" });
-      setShowPasswordForm(false);
-      logout();
-      navigate("/");
+      const response = await axiosInstance.put(`/api/v1/admin/auth/profile`, payload, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      setSuccess("Profile updated successfully");
+      
+      // Update local storage and context manually, or trigger a re-fetch
+      // For simplicity, we just reload the page or update local storage directly here
+      // if the backend returns the updated admin object:
+      if (response.data?.data) {
+        const updatedAdmin = response.data.data;
+        localStorage.setItem("user", JSON.stringify(updatedAdmin));
+        // A full reload will re-initialize the context with new local storage data
+        setTimeout(() => window.location.reload(), 1000);
+      }
+      
+      setShowEditForm(false);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to change password");
+      setError(err.response?.data?.message || "Failed to update profile");
     } finally {
       setLoading(false);
     }
@@ -84,11 +113,7 @@ const ProfileView = () => {
     );
   }
   console.log("base_url", BASE_URL);
-  // const profileImage = user.profileImage
-  //   ? `${BASE_URL}/${user.profileImage}`
-  //   : profileFallback;
-
-  const profileImage = profileFallback;
+  const displayImage = user?.profileImage ? `${BASE_URL}${user.profileImage}` : profileFallback;
 
   return (
     <Box
@@ -109,14 +134,14 @@ const ProfileView = () => {
       >
         <Box
           sx={{
-            background: "linear-gradient(to left, #45d85e, #1F4926)",
+            background: "#061B38",
             height: 100,
             borderRadius: "16px 16px 0 0",
             position: "relative",
           }}
         >
           <Avatar
-            src={profileImage}
+            src={displayImage}
             alt={user.userName}
             sx={{
               width: 120,
@@ -137,7 +162,7 @@ const ProfileView = () => {
             gutterBottom
             sx={{ fontWeight: "bold", color: "text.primary" }}
           >
-            {user.userName}
+            {user.name || "Admin"}
           </Typography>
           <Typography
             variant="body1"
@@ -163,7 +188,7 @@ const ProfileView = () => {
           <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
             <Button
               variant="outlined"
-              onClick={() => setShowPasswordForm(true)}
+              onClick={() => setShowEditForm(true)}
               sx={{
                 borderRadius: 2,
                 textTransform: "none",
@@ -171,20 +196,20 @@ const ProfileView = () => {
                 fontWeight: "medium",
                 px: 3,
                 py: 1,
-                borderColor: "#1F4926",
-                color: "#1F4926",
+                borderColor: "#061B38",
+                color: "#061B38",
                 "&:hover": {
-                  // backgroundColor: "#1F4926",
+                  backgroundColor: "#061B3810",
                 },
               }}
             >
-              Change Password
+              Edit Profile
             </Button>
           </Box>
         </CardContent>
       </Card>
 
-      {showPasswordForm && (
+      {showEditForm && (
         <Card
           sx={{
             mt: 3,
@@ -198,7 +223,7 @@ const ProfileView = () => {
               gutterBottom
               sx={{ fontWeight: "bold", mb: 3 }}
             >
-              Change Password
+              Edit Profile
             </Typography>
             {error && (
               <Alert severity="error" sx={{ mb: 2 }}>
@@ -210,43 +235,83 @@ const ProfileView = () => {
                 {success}
               </Alert>
             )}
-            <form onSubmit={handlePasswordChange}>
+            <form onSubmit={handleProfileUpdate}>
               <TextField
                 fullWidth
-                label="Current Password"
-                name="currentPassword"
-                type="password"
-                value={formData.currentPassword}
+                label="Name"
+                name="name"
+                type="text"
+                value={formData.name}
                 onChange={handleChange}
                 margin="normal"
                 variant="outlined"
                 required
-                autoComplete="current-password"
+              />
+              <TextField
+                fullWidth
+                label="Email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                margin="normal"
+                variant="outlined"
+                required
               />
               <TextField
                 fullWidth
                 label="New Password"
-                name="password"
-                type="password"
-                value={formData.password}
+                name="newPassword"
+                type={showPassword ? "text" : "password"}
+                value={formData.newPassword}
                 onChange={handleChange}
                 margin="normal"
                 variant="outlined"
-                required
-                autoComplete="new-password"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleClickShowPassword} edge="end">
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
               <TextField
                 fullWidth
-                label="Confirm New Password"
+                label="Confirm Password"
                 name="confirmPassword"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 margin="normal"
                 variant="outlined"
-                required
-                autoComplete="new-password"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleClickShowPassword} edge="end">
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
+              <Box sx={{ mt: 2, mb: 1 }}>
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  Profile Image
+                </Typography>
+                {imagePreview && (
+                  <Box sx={{ mb: 2 }}>
+                    <img src={imagePreview} alt="Preview" style={{ width: 100, height: 100, borderRadius: '8px', objectFit: 'cover' }} />
+                  </Box>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  style={{ display: "block", width: "100%" }}
+                />
+              </Box>
               <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
                 <Button
                   type="submit"
@@ -259,23 +324,23 @@ const ProfileView = () => {
                     textTransform: "none",
                     fontSize: "1.1rem",
                     fontWeight: "medium",
-                    background: "linear-gradient(to right, #EA2829, #800303)",
+                    backgroundColor: "#061B38",
                     color: "#fff",
                     "&:hover": {
-                      background: "linear-gradient(to right, #800303, #EA2829)",
+                      backgroundColor: "#00113A",
                     },
                   }}
                 >
                   {loading ? (
                     <CircularProgress size={24} color="inherit" />
                   ) : (
-                    "Change Password"
+                    "Save Changes"
                   )}
                 </Button>
 
                 <Button
                   variant="outlined"
-                  onClick={() => setShowPasswordForm(false)}
+                  onClick={() => setShowEditForm(false)}
                   fullWidth
                   sx={{
                     py: 1.5,
@@ -283,10 +348,10 @@ const ProfileView = () => {
                     textTransform: "none",
                     fontSize: "1.1rem",
                     fontWeight: "medium",
-                    borderColor: "#800303",
-                    color: "#800303",
+                    borderColor: "#061B38",
+                    color: "#061B38",
                     "&:hover": {
-                      backgroundColor: "#80030320",
+                      backgroundColor: "#061B3820",
                     },
                   }}
                 >

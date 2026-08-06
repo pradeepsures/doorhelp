@@ -94,4 +94,12 @@ main::-webkit-scrollbar-thumb:hover {
   .bg-primary-gradient {
     @apply bg-gradient-to-r from-blue-600 to-blue-900;
   }
-}
+  
+  .bg-theme-gradient-vertical {
+    background: linear-gradient(to top, #00113A33 20%, #00113A99 60%, #061B38FA 98%, #061B38 100%);
+  }
+
+  .bg-theme-gradient-horizontal {
+    background: linear-gradient(to left, #00113A33 20%, #00113A99 60%, #061B38FA 98%, #061B38 100%);
+  }
+}

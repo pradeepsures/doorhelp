@@ -36,16 +36,13 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 
 const Navbar = () => {
   return (
-    <div className="h-18 w-full bg-gradient-to-r from-blue-600 to-blue-900 shadow-md flex items-center px-6">
+    <div className="h-18 w-full bg-theme-gradient-horizontal shadow-md flex items-center px-6">
       <div className="flex w-full justify-between items-center">
         
         {/* Title */}
         <div>
           <h1 className="sm:text-sm md:text-lg lg:text-2xl xl:text-3xl font-bold italic flex text-white tracking-wide">
-            Bharat
-            <span className="pl-2 text-white-300">
-              Metal Grid
-            </span>
+            DoorHelp
           </h1>
         </div>
 
@@ -64,3 +61,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
