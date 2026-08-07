@@ -3,6 +3,7 @@ import { Box, Typography, Paper, CircularProgress, IconButton, Divider, Chip } f
 import { useNavigate, useParams } from "react-router-dom";
 import { MdArrowBack } from "react-icons/md";
 import { getBannerById } from "../../Services/bannerService";
+import { formatDateTime } from "../../utils/dateFormatter";
 import toast from "react-hot-toast";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
@@ -82,10 +83,10 @@ const BannerView = () => {
             
             <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
               <Typography variant="body2" color="text.secondary">
-                Created: {new Date(banner.createdAt).toLocaleString()}
+                Created: {formatDateTime(banner.createdAt)}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Last Updated: {new Date(banner.updatedAt).toLocaleString()}
+                Last Updated: {formatDateTime(banner.updatedAt)}
               </Typography>
             </Box>
           </Box>

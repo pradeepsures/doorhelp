@@ -10,37 +10,60 @@ import {
   FiDownload,
   FiRefreshCw
 } from "react-icons/fi";
-import { getBanners, deleteBanner } from "../../Services/bannerService";
+import { getSubcategories, deleteSubcategory } from "../../Services/subcategoryService";
+import { getCategories } from "../../Services/categoryService";
 import { exportToExcel } from "../../utils/exportToexcel";
 import { formatDate } from "../../utils/dateFormatter";
 import toast from "react-hot-toast";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
 
-export default function BannerList() {
+export default function SubcategoryList() {
   const navigate = useNavigate();
 
-  const [banners, setBanners] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
+  const [categories, setCategories] = useState([]); // For category filter
   const [loading, setLoading] = useState(true);
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [deletedFilter, setDeletedFilter] = useState("");
   
   const [openMenuId, setOpenMenuId] = useState(null);
   const menuRefs = useRef({});
 
-  const fetchBanners = async (currentPage, searchQuery, currentStatus, currentDeleted) => {
+  // Fetch active categories for filter dropdown
+  useEffect(() => {
+    const fetchFilterCategories = async () => {
+      try {
+        // Fetch active and non-deleted categories, limit 100 to populate dropdown
+        const res = await getCategories(1, "", "true", "false", 100);
+        setCategories(res.data || []);
+      } catch (err) {
+        console.error("Error fetching categories for filter:", err);
+      }
+    };
+    fetchFilterCategories();
+  }, []);
+
+  const fetchSubcategories = async (currentPage, searchQuery, currentCategoryId, currentStatus, currentDeleted) => {
     try {
       setLoading(true);
-      const res = await getBanners(currentPage, searchQuery, currentStatus, currentDeleted);
-      setBanners(res.data);
+      const res = await getSubcategories(
+        currentPage,
+        searchQuery,
+        currentCategoryId,
+        currentStatus,
+        currentDeleted
+      );
+      setSubcategories(res.data || []);
       setTotalPages(res.pagination?.totalPages || res.totalPages || 1);
     } catch (error) {
-      console.error("Error fetching banners:", error);
-      toast.error("Failed to load banners");
+      console.error("Error fetching subcategories:", error);
+      toast.error("Failed to load subcategories");
     } finally {
       setLoading(false);
     }
@@ -48,10 +71,10 @@ export default function BannerList() {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      fetchBanners(page, search, statusFilter, deletedFilter);
+      fetchSubcategories(page, search, categoryFilter, statusFilter, deletedFilter);
     }, 500);
     return () => clearTimeout(delayDebounceFn);
-  }, [page, search, statusFilter, deletedFilter]);
+  }, [page, search, categoryFilter, statusFilter, deletedFilter]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -69,37 +92,42 @@ export default function BannerList() {
   }, [openMenuId]);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this banner?")) return;
+    if (!window.confirm("Are you sure you want to delete this subcategory?")) return;
 
     try {
-      await deleteBanner(id);
-      toast.success("Banner deleted successfully");
-      fetchBanners(page, search, statusFilter, deletedFilter);
+      await deleteSubcategory(id);
+      toast.success("Subcategory deleted successfully");
+      fetchSubcategories(page, search, categoryFilter, statusFilter, deletedFilter);
     } catch (err) {
-      toast.error("Failed to delete banner");
+      toast.error(err.message || "Failed to delete subcategory");
     }
   };
 
   const handleReset = () => {
     setSearch("");
+    setCategoryFilter("");
     setStatusFilter("");
     setDeletedFilter("");
     setPage(1);
-    toast.success("Filter reset successfully");
+    toast.success("Filters reset successfully");
   };
 
   const handleDownloadExcel = () => {
-    if (!banners.length) {
+    if (!subcategories.length) {
       toast.error("No data available to export");
       return;
     }
-    const formattedData = banners.map((item, index) => ({
+    const formattedData = subcategories.map((item, index) => ({
       "Sr No": index + 1,
-      Title: item.title || "",
+      Name: item.name || "",
+      Category: item.categoryId?.name || "",
+      Price: item.price || 0,
+      "Original Price": item.originalPrice || "",
       Status: item.status ? "Active" : "Inactive",
+      Deleted: item.isDeleted ? "Yes" : "No",
       "Created At": item.createdAt ? formatDate(item.createdAt) : "",
     }));
-    exportToExcel(formattedData, "Banners_List");
+    exportToExcel(formattedData, "Subcategories_List");
   };
 
   const toggleMenu = (id) => {
@@ -112,7 +140,7 @@ export default function BannerList() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
           <h1 className="text-2xl font-bold text-gray-900">
-            Banners
+            Subcategories
           </h1>
 
           <div className="flex flex-wrap gap-3 w-full sm:w-auto">
@@ -121,7 +149,7 @@ export default function BannerList() {
               <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search by title..."
+                placeholder="Search by name..."
                 value={search}
                 onChange={(e) => {
                   setSearch(e.target.value);
@@ -130,6 +158,23 @@ export default function BannerList() {
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D877F] focus:outline-none text-sm"
               />
             </div>
+
+            {/* Parent Category Filter */}
+            <select
+              value={categoryFilter}
+              onChange={(e) => {
+                setCategoryFilter(e.target.value);
+                setPage(1);
+              }}
+              className="py-2 px-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D877F] focus:outline-none text-sm bg-white"
+            >
+              <option value="">All Categories</option>
+              {categories.map((cat) => (
+                <option key={cat._id} value={cat._id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
 
             {/* Status Filter */}
             <select
@@ -177,10 +222,10 @@ export default function BannerList() {
 
             {/* Create */}
             <button
-              onClick={() => navigate("/home/banners/create")}
+              onClick={() => navigate("/home/subcategory/create")}
               className="px-5 py-2 flex items-center justify-center whitespace-nowrap gap-2 bg-[#0D877F] text-white rounded-lg hover:bg-opacity-90 transition font-medium text-sm"
             >
-              <FiPlus /> Add Banner
+              <FiPlus /> Add Subcategory
             </button>
           </div>
         </div>
@@ -189,9 +234,9 @@ export default function BannerList() {
         <div className="bg-white shadow-lg rounded-xl border border-gray-200 overflow-visible">
           {loading ? (
             <div className="py-20 text-center text-gray-600">Loading...</div>
-          ) : banners.length === 0 ? (
+          ) : subcategories.length === 0 ? (
             <div className="py-20 text-center text-gray-500">
-              No banners found
+              No subcategories found
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -200,7 +245,10 @@ export default function BannerList() {
                   <tr>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Sr No</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Image</th>
-                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Title</th>
+                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Name</th>
+                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Category</th>
+                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Price</th>
+                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Original Price</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Status</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Created Date</th>
                     <th className="px-6 py-4 text-right font-medium tracking-wider bg-theme-gradient-horizontal">Actions</th>
@@ -208,7 +256,7 @@ export default function BannerList() {
                 </thead>
 
                 <tbody>
-                  {banners.map((row, index) => {
+                  {subcategories.map((row, index) => {
                     return (
                       <tr
                         key={row._id}
@@ -218,22 +266,24 @@ export default function BannerList() {
                           {(page - 1) * 10 + index + 1}
                         </td>
                         <td className="px-6 py-3 text-sm">
-                          <div className="relative inline-block">
-                            <img 
-                              src={row.images && row.images.length > 0 ? `${BASE_URL}${row.images[0]}` : "https://via.placeholder.com/80x40?text=No+Image"} 
-                              alt={row.title} 
-                              className="w-20 h-10 object-cover rounded shadow-sm border border-gray-200"
-                              onError={(e) => { e.target.src = "https://via.placeholder.com/80x40?text=No+Image" }}
-                            />
-                            {row.images && row.images.length > 1 && (
-                              <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow">
-                                +{row.images.length - 1}
-                              </span>
-                            )}
-                          </div>
+                          <img 
+                            src={row.image ? `${BASE_URL}${row.image}` : "https://via.placeholder.com/80x40?text=No+Image"} 
+                            alt={row.name} 
+                            className="w-16 h-10 object-cover rounded shadow-sm border border-gray-200"
+                            onError={(e) => { e.target.src = "https://via.placeholder.com/80x40?text=No+Image" }}
+                          />
                         </td>
                         <td className="px-6 py-3 text-sm font-semibold text-gray-800">
-                          {row.title}
+                          {row.name}
+                        </td>
+                        <td className="px-6 py-3 text-sm text-gray-600 font-medium">
+                          {row.categoryId?.name || "N/A"}
+                        </td>
+                        <td className="px-6 py-3 text-sm text-gray-800 font-semibold">
+                          ₹{row.price}
+                        </td>
+                        <td className="px-6 py-3 text-sm text-gray-400 line-through">
+                          {row.originalPrice ? `₹${row.originalPrice}` : "-"}
                         </td>
                         <td className="px-6 py-3 text-sm">
                           <span className={`px-3 py-1 rounded-full text-xs font-medium ${row.status ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}>
@@ -263,7 +313,7 @@ export default function BannerList() {
                                   <button
                                     onClick={() => {
                                       setOpenMenuId(null);
-                                      navigate(`/home/banners/view/${row._id}`);
+                                      navigate(`/home/subcategory/view/${row._id}`);
                                     }}
                                     className="w-full px-4 py-2.5 hover:bg-[#0D877F]/10 flex items-center gap-3 text-[#0D877F] transition-colors font-medium"
                                   >
@@ -275,7 +325,7 @@ export default function BannerList() {
                                   <button
                                     onClick={() => {
                                       setOpenMenuId(null);
-                                      navigate(`/home/banners/edit/${row._id}`);
+                                      navigate(`/home/subcategory/edit/${row._id}`);
                                     }}
                                     className="w-full px-4 py-2.5 hover:bg-blue-50 flex items-center gap-3 text-blue-600 transition-colors font-medium"
                                   >
@@ -307,7 +357,7 @@ export default function BannerList() {
           )}
 
           {/* Pagination */}
-          {!loading && banners.length > 0 && (
+          {!loading && subcategories.length > 0 && (
             <div className="px-6 py-4 border-t border-gray-100 bg-gray-50 flex justify-between items-center text-sm">
               <div className="text-gray-500">
                 Page <span className="font-semibold text-gray-800">{page}</span> of <span className="font-semibold text-gray-800">{totalPages}</span>

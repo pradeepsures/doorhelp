@@ -15,6 +15,12 @@ import CmsEditor from "./Pages/CMS/CmsEditor";
 import BannerList from "./Pages/Banners/BannerList";
 import BannerForm from "./Pages/Banners/BannerForm";
 import BannerView from "./Pages/Banners/BannerView";
+import CategoryList from "./Pages/Category/CategoryList";
+import CategoryForm from "./Pages/Category/CategoryForm";
+import CategoryView from "./Pages/Category/CategoryView";
+import SubcategoryList from "./Pages/Subcategory/SubcategoryList";
+import SubcategoryForm from "./Pages/Subcategory/SubcategoryForm";
+import SubcategoryView from "./Pages/Subcategory/SubcategoryView";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +45,14 @@ const router = createBrowserRouter([
       { path: "banners/create", element: <BannerForm /> },
       { path: "banners/edit/:id", element: <BannerForm /> },
       { path: "banners/view/:id", element: <BannerView /> },
+      { path: "category", element: <CategoryList /> },
+      { path: "category/create", element: <CategoryForm /> },
+      { path: "category/edit/:id", element: <CategoryForm /> },
+      { path: "category/view/:id", element: <CategoryView /> },
+      { path: "subcategory", element: <SubcategoryList /> },
+      { path: "subcategory/create", element: <SubcategoryForm /> },
+      { path: "subcategory/edit/:id", element: <SubcategoryForm /> },
+      { path: "subcategory/view/:id", element: <SubcategoryView /> },
     ],
   },
   {

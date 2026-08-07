@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { HiMenuAlt3 } from "react-icons/hi";
-import { MdOutlineDashboard, MdOutlineArticle, MdOutlineViewCarousel, MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { MdOutlineDashboard, MdOutlineArticle, MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { GiVerticalBanner } from "react-icons/gi";
+import { MdHomeRepairService } from "react-icons/md";
 
 const Sidebar = () => {
   const [open, setOpen] = useState(true);
@@ -15,7 +17,15 @@ const Sidebar = () => {
 
   const menus = [
     { name: "Dashboard", link: "/home", icon: MdOutlineDashboard },
-    { name: "Banners", link: "/home/banners", icon: MdOutlineViewCarousel },
+    { name: "Banners", link: "/home/banners", icon: GiVerticalBanner },
+    {
+      name: "Services",
+      icon: MdHomeRepairService,
+      submenus: [
+        { name: "Category", link: "/home/category" },
+        { name: "Sub Category", link: "/home/subcategory" },
+      ],
+    },
     {
       name: "CMS",
       icon: MdOutlineArticle,

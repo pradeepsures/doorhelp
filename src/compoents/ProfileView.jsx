@@ -18,6 +18,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import profileFallback from "../../src/profilelogo.png";
 import axiosInstance from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import { formatDate } from "../utils/dateFormatter";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -183,7 +184,7 @@ const ProfileView = () => {
             </Box>
           )} */}
           <Typography variant="body2" align="center" color="text.secondary">
-            Joined on: {new Date(user.createdAt).toLocaleDateString()}
+            Joined on: {formatDate(user.createdAt)}
           </Typography>
           <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
             <Button
