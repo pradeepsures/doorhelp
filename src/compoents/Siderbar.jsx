@@ -23,7 +23,7 @@ const Sidebar = () => {
       icon: SiMastercard,
       submenus: [
         { name: "User", link: "/home/user" },
-        { name: "Vendor", link: "/home/vendor" },
+        { name: "Partners", link: "/home/vendor" },
       ],
     },
     { name: "Banners", link: "/home/banners", icon: GiVerticalBanner },
