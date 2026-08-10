@@ -308,7 +308,7 @@ export default function SubcategoryList() {
                             </button>
 
                             {openMenuId === row._id && (
-                              <ul className="absolute right-0 mt-2 w-36 bg-white border border-gray-100 rounded-lg shadow-xl text-sm z-50 overflow-hidden">
+                              <ul className="absolute right-0 mt-2 w-44 bg-white border border-gray-100 rounded-lg shadow-xl text-sm z-50 overflow-hidden">
                                 <li>
                                   <button
                                     onClick={() => {
@@ -330,6 +330,18 @@ export default function SubcategoryList() {
                                     className="w-full px-4 py-2.5 hover:bg-blue-50 flex items-center gap-3 text-blue-600 transition-colors font-medium"
                                   >
                                     <FiEdit size={15} /> Edit
+                                  </button>
+                                </li>
+
+                                <li>
+                                  <button
+                                    onClick={() => {
+                                      setOpenMenuId(null);
+                                      navigate(`/home/subcategory/${row._id}/included-services`);
+                                    }}
+                                    className="w-full px-4 py-2.5 hover:bg-purple-50 flex items-center gap-3 text-purple-600 transition-colors font-medium"
+                                  >
+                                    <FiPlus size={15} /> Include Services
                                   </button>
                                 </li>
 

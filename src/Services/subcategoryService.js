@@ -86,3 +86,65 @@ export const deleteSubcategory = async (id) => {
   }
   return result;
 };
+
+export const getIncludedServices = async (subCategoryId) => {
+  const res = await fetch(`${BASE_URL}/api/v1/admin/subcategory/${subCategoryId}/included-services`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+  });
+
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(result?.error?.message || result?.message || "Failed to fetch included services");
+  }
+  return result;
+};
+
+export const createIncludedService = async (subCategoryId, formData) => {
+  const res = await fetch(`${BASE_URL}/api/v1/admin/subcategory/${subCategoryId}/included-services`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+    body: formData,
+  });
+
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(result?.error?.message || result?.message || "Failed to create included service");
+  }
+  return result;
+};
+
+export const updateIncludedService = async (id, formData) => {
+  const res = await fetch(`${BASE_URL}/api/v1/admin/subcategory/included-services/${id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+    body: formData,
+  });
+
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(result?.error?.message || result?.message || "Failed to update included service");
+  }
+  return result;
+};
+
+export const deleteIncludedService = async (id) => {
+  const res = await fetch(`${BASE_URL}/api/v1/admin/subcategory/included-services/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+  });
+
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(result?.error?.message || result?.message || "Failed to delete included service");
+  }
+  return result;
+};

@@ -27,6 +27,10 @@ const SubcategoryForm = () => {
   const [imagePreview, setImagePreview] = useState("");
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [userRequirements, setUserRequirements] = useState([]);
+  const [userReqInput, setUserReqInput] = useState("");
+  const [equipments, setEquipments] = useState([]);
+  const [equipmentInput, setEquipmentInput] = useState("");
 
   // Fetch active categories to populate dropdown
   useEffect(() => {
@@ -64,6 +68,8 @@ const SubcategoryForm = () => {
         originalPrice: sub.originalPrice || "",
         status: sub.status,
       });
+      setUserRequirements(sub.userRequirements || []);
+      setEquipments(sub.equipments || []);
       if (sub.image) {
         setImagePreview(`${BASE_URL}${sub.image}`);
       }
@@ -124,6 +130,8 @@ const SubcategoryForm = () => {
       payload.append("originalPrice", Number(formData.originalPrice));
     }
     payload.append("status", formData.status);
+    payload.append("userRequirements", JSON.stringify(userRequirements));
+    payload.append("equipments", JSON.stringify(equipments));
     
     if (image) {
       payload.append("image", image);
@@ -283,6 +291,114 @@ const SubcategoryForm = () => {
                   onChange={handleImageChange}
                   className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-[#0D877F]/10 file:text-[#0D877F] hover:file:bg-[#0D877F]/20 file:cursor-pointer cursor-pointer border border-gray-300 rounded-lg bg-white p-1"
                 />
+              </div>
+
+              {/* User Requirements Section */}
+              <div className="bg-gray-50 rounded-xl p-5 border border-gray-200">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  User Requirements (e.g. Keep water, Keep stair)
+                </label>
+                <div className="flex gap-2 mb-3">
+                  <input
+                    type="text"
+                    value={userReqInput}
+                    onChange={(e) => setUserReqInput(e.target.value)}
+                    placeholder="Add a user requirement..."
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D877F] focus:outline-none text-sm bg-white"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (userReqInput.trim()) {
+                          setUserRequirements([...userRequirements, userReqInput.trim()]);
+                          setUserReqInput("");
+                        }
+                      }
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (userReqInput.trim()) {
+                        setUserRequirements([...userRequirements, userReqInput.trim()]);
+                        setUserReqInput("");
+                      }
+                    }}
+                    className="px-4 py-2 bg-[#0D877F] text-white rounded-lg hover:bg-[#0b7069] transition text-sm font-medium"
+                  >
+                    Add
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {userRequirements.map((req, index) => (
+                    <span key={index} className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#0D877F]/10 text-[#0D877F] rounded-full text-xs font-medium border border-[#0D877F]/20">
+                      {req}
+                      <button
+                        type="button"
+                        onClick={() => setUserRequirements(userRequirements.filter((_, i) => i !== index))}
+                        className="hover:text-red-600 font-bold ml-1 focus:outline-none text-sm"
+                      >
+                        &times;
+                      </button>
+                    </span>
+                  ))}
+                  {userRequirements.length === 0 && (
+                    <span className="text-gray-400 text-xs italic">No requirements added yet.</span>
+                  )}
+                </div>
+              </div>
+
+              {/* Equipments Section */}
+              <div className="bg-gray-50 rounded-xl p-5 border border-gray-200">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Equipments Provided (e.g. Sanitizer, Clothes, Pump Pressure)
+                </label>
+                <div className="flex gap-2 mb-3">
+                  <input
+                    type="text"
+                    value={equipmentInput}
+                    onChange={(e) => setEquipmentInput(e.target.value)}
+                    placeholder="Add an equipment..."
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D877F] focus:outline-none text-sm bg-white"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        if (equipmentInput.trim()) {
+                          setEquipments([...equipments, equipmentInput.trim()]);
+                          setEquipmentInput("");
+                        }
+                      }
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (equipmentInput.trim()) {
+                        setEquipments([...equipments, equipmentInput.trim()]);
+                        setEquipmentInput("");
+                      }
+                    }}
+                    className="px-4 py-2 bg-[#0D877F] text-white rounded-lg hover:bg-[#0b7069] transition text-sm font-medium"
+                  >
+                    Add
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {equipments.map((eq, index) => (
+                    <span key={index} className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium border border-blue-100">
+                      {eq}
+                      <button
+                        type="button"
+                        onClick={() => setEquipments(equipments.filter((_, i) => i !== index))}
+                        className="hover:text-red-600 font-bold ml-1 focus:outline-none text-sm"
+                      >
+                        &times;
+                      </button>
+                    </span>
+                  ))}
+                  {equipments.length === 0 && (
+                    <span className="text-gray-400 text-xs italic">No equipments added yet.</span>
+                  )}
+                </div>
               </div>
 
               {/* Status Switch Toggle */}

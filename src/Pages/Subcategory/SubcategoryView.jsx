@@ -131,6 +131,69 @@ const SubcategoryView = () => {
                 )}
               </div>
 
+              {/* User Requirements */}
+              <div className="border-t border-gray-100 pt-6">
+                <h3 className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">
+                  User Requirements (What we need from you)
+                </h3>
+                {subcategory.userRequirements && subcategory.userRequirements.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {subcategory.userRequirements.map((req, idx) => (
+                      <span key={idx} className="px-3 py-1 bg-teal-50 text-[#0D877F] rounded-full text-xs font-semibold border border-teal-100">
+                        {req}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-400 italic">No user requirements specified.</p>
+                )}
+              </div>
+
+              {/* Equipments Provided */}
+              <div className="border-t border-gray-100 pt-6">
+                <h3 className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">
+                  Equipments Provided (We will bring)
+                </h3>
+                {subcategory.equipments && subcategory.equipments.length > 0 ? (
+                  <div className="flex flex-wrap gap-2">
+                    {subcategory.equipments.map((eq, idx) => (
+                      <span key={idx} className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-semibold border border-blue-100">
+                        {eq}
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-400 italic">No equipments specified.</p>
+                )}
+              </div>
+
+              {/* Included Services */}
+              <div className="border-t border-gray-100 pt-6">
+                <h3 className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-3">
+                  What's Included in Services ({subcategory.includedServices?.length || 0})
+                </h3>
+                {subcategory.includedServices && subcategory.includedServices.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {subcategory.includedServices.map((service, idx) => (
+                      <div key={idx} className="flex gap-3 bg-gray-50 border border-gray-100 rounded-lg p-3">
+                        <img 
+                          src={`${BASE_URL}${service.image}`} 
+                          alt={service.title} 
+                          className="w-16 h-16 object-cover rounded-md border border-gray-200"
+                          onError={(e) => { e.target.src = "https://via.placeholder.com/80x80?text=No+Image" }}
+                        />
+                        <div>
+                          <h4 className="text-sm font-bold text-gray-800">{service.title}</h4>
+                          <p className="text-xs text-gray-500 line-clamp-2 mt-0.5">{service.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-400 italic">No included services added yet.</p>
+                )}
+              </div>
+
               {/* Metadata Footer */}
               <div className="flex flex-col sm:flex-row justify-between text-xs text-gray-400 pt-6 border-t border-gray-50 gap-2">
                 <span>Created: {formatDateTime(subcategory.createdAt)}</span>

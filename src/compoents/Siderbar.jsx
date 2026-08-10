@@ -4,6 +4,7 @@ import { HiMenuAlt3 } from "react-icons/hi";
 import { MdOutlineDashboard, MdOutlineArticle, MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import { GiVerticalBanner } from "react-icons/gi";
 import { MdHomeRepairService } from "react-icons/md";
+import { SiMastercard } from "react-icons/si";
 
 const Sidebar = () => {
   const [open, setOpen] = useState(true);
@@ -17,6 +18,14 @@ const Sidebar = () => {
 
   const menus = [
     { name: "Dashboard", link: "/home", icon: MdOutlineDashboard },
+        {
+      name: "Master",
+      icon: SiMastercard,
+      submenus: [
+        { name: "User", link: "/home/user" },
+        { name: "Vendor", link: "/home/vendor" },
+      ],
+    },
     { name: "Banners", link: "/home/banners", icon: GiVerticalBanner },
     {
       name: "Services",
@@ -26,6 +35,7 @@ const Sidebar = () => {
         { name: "Sub Category", link: "/home/subcategory" },
       ],
     },
+
     {
       name: "CMS",
       icon: MdOutlineArticle,

@@ -21,6 +21,11 @@ import CategoryView from "./Pages/Category/CategoryView";
 import SubcategoryList from "./Pages/Subcategory/SubcategoryList";
 import SubcategoryForm from "./Pages/Subcategory/SubcategoryForm";
 import SubcategoryView from "./Pages/Subcategory/SubcategoryView";
+import IncludedServiceManager from "./Pages/Subcategory/IncludedServiceManager";
+import UserList from "./Pages/User/UserList";
+import UserView from "./Pages/User/UserView";
+import VendorList from "./Pages/Vendor/VendorList";
+import VendorView from "./Pages/Vendor/VendorView";
 
 const router = createBrowserRouter([
   {
@@ -53,6 +58,11 @@ const router = createBrowserRouter([
       { path: "subcategory/create", element: <SubcategoryForm /> },
       { path: "subcategory/edit/:id", element: <SubcategoryForm /> },
       { path: "subcategory/view/:id", element: <SubcategoryView /> },
+      { path: "subcategory/:subCategoryId/included-services", element: <IncludedServiceManager /> },
+      { path: "user", element: <UserList /> },
+      { path: "user/view/:id", element: <UserView /> },
+      { path: "vendor", element: <VendorList /> },
+      { path: "vendor/view/:id", element: <VendorView /> },
     ],
   },
   {
