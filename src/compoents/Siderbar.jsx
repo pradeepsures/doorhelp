@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { HiMenuAlt3 } from "react-icons/hi";
-import { MdOutlineDashboard, MdOutlineArticle, MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
+import { MdOutlineDashboard, MdOutlineArticle, MdKeyboardArrowDown, MdKeyboardArrowUp, MdOutlineCalendarToday } from "react-icons/md";
 import { GiVerticalBanner } from "react-icons/gi";
 import { MdHomeRepairService } from "react-icons/md";
 import { SiMastercard } from "react-icons/si";
@@ -18,7 +18,8 @@ const Sidebar = () => {
 
   const menus = [
     { name: "Dashboard", link: "/home", icon: MdOutlineDashboard },
-        {
+    { name: "Booking", link: "/home/booking", icon: MdOutlineCalendarToday },
+    {
       name: "Master",
       icon: SiMastercard,
       submenus: [

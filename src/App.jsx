@@ -26,6 +26,8 @@ import UserList from "./Pages/User/UserList";
 import UserView from "./Pages/User/UserView";
 import VendorList from "./Pages/Vendor/VendorList";
 import VendorView from "./Pages/Vendor/VendorView";
+import BookingList from "./Pages/Booking/BookingList";
+import BookingView from "./Pages/Booking/BookingView";
 
 const router = createBrowserRouter([
   {
@@ -63,6 +65,8 @@ const router = createBrowserRouter([
       { path: "user/view/:id", element: <UserView /> },
       { path: "vendor", element: <VendorList /> },
       { path: "vendor/view/:id", element: <VendorView /> },
+      { path: "booking", element: <BookingList /> },
+      { path: "booking/view/:id", element: <BookingView /> },
     ],
   },
   {
