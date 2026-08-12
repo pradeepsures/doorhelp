@@ -161,7 +161,7 @@ export default function BookingList() {
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Customer</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Category</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Services</th>
-                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Date & Slot</th>
+                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Date & Time</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Grand Total</th>
                     <th className="px-6 py-4 text-center font-medium tracking-wider bg-theme-gradient-horizontal">Payment</th>
                     <th className="px-6 py-4 text-center font-medium tracking-wider bg-theme-gradient-horizontal">Status</th>
@@ -286,7 +286,7 @@ export default function BookingList() {
                     });
 
                     if (filteredVendors.length === 0) {
-                      return <option disabled value="">No active, online vendors available for this category</option>;
+                      return <option disabled value="">No partner found</option>;
                     }
 
                     return filteredVendors.map((v) => (

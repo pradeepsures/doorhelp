@@ -18,7 +18,7 @@ const Sidebar = () => {
 
   const menus = [
     { name: "Dashboard", link: "/home", icon: MdOutlineDashboard },
-    { name: "Booking", link: "/home/booking", icon: MdOutlineCalendarToday },
+ 
     {
       name: "Master",
       icon: SiMastercard,
@@ -27,7 +27,8 @@ const Sidebar = () => {
         { name: "Partners", link: "/home/vendor" },
       ],
     },
-    { name: "Banners", link: "/home/banners", icon: GiVerticalBanner },
+      { name: "Booking", link: "/home/booking", icon: MdOutlineCalendarToday },
+
     {
       name: "Services",
       icon: MdHomeRepairService,
@@ -36,6 +37,8 @@ const Sidebar = () => {
         { name: "Sub Category", link: "/home/subcategory" },
       ],
     },
+
+        { name: "Banners", link: "/home/banners", icon: GiVerticalBanner },
 
     {
       name: "CMS",
