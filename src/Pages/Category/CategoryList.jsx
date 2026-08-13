@@ -28,7 +28,7 @@ export default function CategoryList() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [deletedFilter, setDeletedFilter] = useState("");
-  
+
   const [openMenuId, setOpenMenuId] = useState(null);
   const menuRefs = useRef({});
 
@@ -219,9 +219,9 @@ export default function CategoryList() {
                           {(page - 1) * 10 + index + 1}
                         </td>
                         <td className="px-6 py-3 text-sm">
-                          <img 
-                            src={row.image ? `${BASE_URL}${row.image}` : "https://via.placeholder.com/80x40?text=No+Image"} 
-                            alt={row.name} 
+                          <img
+                            src={row.image ? `${BASE_URL}${row.image}` : "https://via.placeholder.com/80x40?text=No+Image"}
+                            alt={row.name}
                             className="w-16 h-10 object-cover rounded shadow-sm border border-gray-200"
                             onError={(e) => { e.target.src = "https://via.placeholder.com/80x40?text=No+Image" }}
                           />

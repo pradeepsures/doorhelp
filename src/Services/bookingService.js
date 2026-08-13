@@ -2,8 +2,12 @@ const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const getToken = () => localStorage.getItem("token");
 
-export const getBookings = async () => {
-  const url = `${BASE_URL}/api/v1/admin/bookings`;
+export const getBookings = async (page = 1, search = "", status = "") => {
+  const params = { page, limit: 10 };
+  if (search) params.search = search;
+  if (status !== "") params.status = status;
+  const queryString = new URLSearchParams(params).toString();
+  const url = `${BASE_URL}/api/v1/admin/bookings${queryString ? `?${queryString}` : ""}`;
 
   const res = await fetch(url, {
     method: "GET",

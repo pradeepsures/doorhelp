@@ -11,17 +11,20 @@ export default function BookingList() {
   const [bookings, setBookings] = useState([]);
   const [vendors, setVendors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [assigningBooking, setAssigningBooking] = useState(null); // booking model
   const [selectedVendorId, setSelectedVendorId] = useState("");
   const [submittingAssign, setSubmittingAssign] = useState(false);
 
-  const fetchBookings = async () => {
+  const fetchBookings = async (currentPage, searchQuery, currentStatus) => {
     try {
       setLoading(true);
-      const res = await getBookings();
+      const res = await getBookings(currentPage, searchQuery, currentStatus);
       setBookings(res.data || []);
+      setTotalPages(res.pagination?.totalPages || 1);
     } catch (error) {
       console.error("Error fetching bookings:", error);
       toast.error("Failed to load bookings");
@@ -41,14 +44,20 @@ export default function BookingList() {
   };
 
   useEffect(() => {
-    fetchBookings();
+    const delayDebounceFn = setTimeout(() => {
+      fetchBookings(page, search, statusFilter);
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [page, search, statusFilter]);
+
+  useEffect(() => {
     fetchActiveVendors();
   }, []);
 
   const handleReset = () => {
     setSearch("");
     setStatusFilter("");
-    fetchBookings();
+    setPage(1);
     toast.success("Filters reset successfully");
   };
 
@@ -59,13 +68,18 @@ export default function BookingList() {
       return;
     }
 
+    if (assigningBooking && assigningBooking.paymentStatus !== "paid") {
+      toast.error("Booking payment is not paid");
+      return;
+    }
+
     try {
       setSubmittingAssign(true);
       await assignVendor(assigningBooking.bookingId, selectedVendorId);
       toast.success("Vendor assigned successfully");
       setAssigningBooking(null);
       setSelectedVendorId("");
-      fetchBookings();
+      fetchBookings(page, search, statusFilter);
     } catch (error) {
       console.error("Error assigning vendor:", error);
       toast.error(error.message || "Failed to assign vendor");
@@ -73,19 +87,6 @@ export default function BookingList() {
       setSubmittingAssign(false);
     }
   };
-
-  // Filter local listings safely
-  const filteredBookings = bookings.filter((b) => {
-    const bookingIdMatches = b.bookingId ? b.bookingId.toLowerCase().includes(search.toLowerCase()) : false;
-    const userNameMatches = b.userId?.name ? b.userId.name.toLowerCase().includes(search.toLowerCase()) : false;
-    const userPhoneMatches = b.userId?.phoneNumber ? b.userId.phoneNumber.includes(search) : false;
-    const vendorNameMatches = b.vendorId?.name ? b.vendorId.name.toLowerCase().includes(search.toLowerCase()) : false;
-    
-    const searchMatches = bookingIdMatches || userNameMatches || userPhoneMatches || vendorNameMatches;
-    const statusMatches = statusFilter === "" || b.bookingStatus === statusFilter;
-
-    return searchMatches && statusMatches;
-  });
 
   const getStatusBadge = (status) => {
     const styles = {
@@ -115,7 +116,10 @@ export default function BookingList() {
                 type="text"
                 placeholder="Search ID, customer, vendor..."
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setPage(1);
+                }}
                 className="w-full sm:w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D877F] focus:outline-none text-sm bg-white"
               />
             </div>
@@ -123,7 +127,10 @@ export default function BookingList() {
             {/* Status Filter */}
             <select
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
+              onChange={(e) => {
+                setStatusFilter(e.target.value);
+                setPage(1);
+              }}
               className="py-2 px-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D877F] focus:outline-none text-sm bg-white text-gray-700 font-medium"
             >
               <option value="">All Statuses</option>
@@ -150,13 +157,14 @@ export default function BookingList() {
         <div className="bg-white shadow-lg rounded-xl border border-gray-200 overflow-visible">
           {loading ? (
             <div className="py-20 text-center text-gray-600 font-medium">Loading Bookings...</div>
-          ) : filteredBookings.length === 0 ? (
+          ) : bookings.length === 0 ? (
             <div className="py-20 text-center text-gray-500 font-medium">No bookings found</div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full border-collapse">
                 <thead>
                   <tr className="text-white text-sm uppercase">
+                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Sr No</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Booking ID</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Customer</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Category</th>
@@ -170,8 +178,11 @@ export default function BookingList() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {filteredBookings.map((row) => (
+                  {bookings.map((row, index) => (
                     <tr key={row._id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-6 py-4 text-sm font-medium text-gray-700">
+                        {(page - 1) * 10 + index + 1}
+                      </td>
                       <td className="px-6 py-4 text-sm font-bold text-gray-900">
                         {row.bookingId}
                       </td>
@@ -221,7 +232,13 @@ export default function BookingList() {
                             <span className="text-sm italic text-gray-400">Not Assigned</span>
                             {row.bookingStatus === 'scheduled' || row.bookingStatus === 'pending' || row.bookingStatus === 'declined' ? (
                               <button
-                                onClick={() => setAssigningBooking(row)}
+                                onClick={() => {
+                                  if (row.paymentStatus !== 'paid') {
+                                    toast.error("Booking payment is not paid");
+                                    return;
+                                  }
+                                  setAssigningBooking(row);
+                                }}
                                 className="flex items-center gap-1 text-xs text-[#0D877F] hover:text-[#0a6660] font-bold"
                               >
                                 <FiUserPlus /> Assign Partner
@@ -243,6 +260,31 @@ export default function BookingList() {
                   ))}
                 </tbody>
               </table>
+            </div>
+          )}
+
+          {/* Pagination */}
+          {!loading && totalPages > 1 && (
+            <div className="flex justify-between items-center px-6 py-4 border-t border-gray-100">
+              <span className="text-sm text-gray-600">
+                Page {page} of {totalPages}
+              </span>
+              <div className="flex gap-2">
+                <button
+                  disabled={page === 1}
+                  onClick={() => setPage((prev) => prev - 1)}
+                  className="px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm disabled:opacity-50 font-medium"
+                >
+                  Previous
+                </button>
+                <button
+                  disabled={page === totalPages}
+                  onClick={() => setPage((prev) => prev + 1)}
+                  className="px-3 py-1.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition text-sm disabled:opacity-50 font-medium"
+                >
+                  Next
+                </button>
+              </div>
             </div>
           )}
         </div>

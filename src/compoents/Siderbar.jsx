@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { HiMenuAlt3 } from "react-icons/hi";
-import { MdOutlineDashboard, MdOutlineArticle, MdKeyboardArrowDown, MdKeyboardArrowUp, MdOutlineCalendarToday } from "react-icons/md";
+import { MdOutlineDashboard, MdOutlineArticle, MdKeyboardArrowDown, MdKeyboardArrowUp, MdOutlineCalendarToday, MdOutlineSettings } from "react-icons/md";
 import { GiVerticalBanner } from "react-icons/gi";
 import { MdHomeRepairService } from "react-icons/md";
 import { SiMastercard } from "react-icons/si";
@@ -38,7 +38,16 @@ const Sidebar = () => {
       ],
     },
 
-        { name: "Banners", link: "/home/banners", icon: GiVerticalBanner },
+     { name: "Banners", link: "/home/banners", icon: GiVerticalBanner },
+
+     {
+      name: "Settings",
+      icon: MdOutlineSettings,
+      submenus: [
+        { name: "Pincodes", link: "/home/pincode" },
+        { name: "Localities", link: "/home/locality" },
+      ],
+    },
 
     {
       name: "CMS",
@@ -49,6 +58,7 @@ const Sidebar = () => {
         { name: "About Us", link: "/home/cms/about" },
       ],
     },
+   
   ];
 
   return (

@@ -28,6 +28,10 @@ import VendorList from "./Pages/Vendor/VendorList";
 import VendorView from "./Pages/Vendor/VendorView";
 import BookingList from "./Pages/Booking/BookingList";
 import BookingView from "./Pages/Booking/BookingView";
+import PincodeList from "./Pages/Pincode/PincodeList";
+import PincodeForm from "./Pages/Pincode/PincodeForm";
+import LocalityList from "./Pages/Locality/LocalityList";
+import LocalityForm from "./Pages/Locality/LocalityForm";
 
 const router = createBrowserRouter([
   {
@@ -67,6 +71,12 @@ const router = createBrowserRouter([
       { path: "vendor/view/:id", element: <VendorView /> },
       { path: "booking", element: <BookingList /> },
       { path: "booking/view/:id", element: <BookingView /> },
+      { path: "pincode", element: <PincodeList /> },
+      { path: "pincode/create", element: <PincodeForm /> },
+      { path: "pincode/edit/:id", element: <PincodeForm /> },
+      { path: "locality", element: <LocalityList /> },
+      { path: "locality/create", element: <LocalityForm /> },
+      { path: "locality/edit/:id", element: <LocalityForm /> },
     ],
   },
   {
