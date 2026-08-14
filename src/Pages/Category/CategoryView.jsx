@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { MdArrowBack } from "react-icons/md";
 import { getCategoryById } from "../../Services/categoryService";
 import { formatDateTime } from "../../utils/dateFormatter";
+import { formatStatus } from "../../utils/stringFormatter";
 import toast from "react-hot-toast";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
@@ -33,7 +34,7 @@ const CategoryView = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 w-full">
-      <div className="max-w-3xl mx-auto">
+      <div className="w-full">
         {/* Back Button and Title */}
         <div className="flex items-center mb-6">
           <button
@@ -58,27 +59,31 @@ const CategoryView = () => {
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-gray-100">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-800 mb-1">{category.name}</h2>
-                  <p className="text-xs text-gray-400 font-medium">Category ID: {category._id}</p>
+                  {category._id && (
+                    <p className="text-xs text-gray-400 font-medium">Category ID: {category._id}</p>
+                  )}
                 </div>
-                <div>
-                  <span
-                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${
-                      category.status
-                        ? "bg-green-100 text-green-800"
-                        : "bg-gray-100 text-gray-600"
-                    }`}
-                  >
-                    {category.status ? "Active" : "Inactive"}
-                  </span>
-                </div>
+                {category.status !== undefined && category.status !== null && (
+                  <div>
+                    <span
+                      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${
+                        category.status
+                          ? "bg-green-100 text-green-800"
+                          : "bg-gray-100 text-gray-600"
+                      }`}
+                    >
+                      {formatStatus(category.status ? "Active" : "Inactive")}
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Image Section */}
-              <div>
-                <h3 className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-3">
-                  Category Image
-                </h3>
-                {category.image ? (
+              {category.image && (
+                <div>
+                  <h3 className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-3">
+                    Category Image
+                  </h3>
                   <div className="border border-gray-200 rounded-lg overflow-hidden max-w-sm shadow-sm bg-gray-50">
                     <img
                       src={`${BASE_URL}${category.image}`}
@@ -89,15 +94,13 @@ const CategoryView = () => {
                       }}
                     />
                   </div>
-                ) : (
-                  <p className="text-sm text-gray-500 italic">No image uploaded.</p>
-                )}
-              </div>
+                </div>
+              )}
 
               {/* Metadata Footer */}
               <div className="flex flex-col sm:flex-row justify-between text-xs text-gray-400 pt-6 border-t border-gray-50 gap-2">
-                <span>Created: {formatDateTime(category.createdAt)}</span>
-                <span>Last Updated: {formatDateTime(category.updatedAt)}</span>
+                {category.createdAt && <span>Created: {formatDateTime(category.createdAt)}</span>}
+                {category.updatedAt && <span>Last Updated: {formatDateTime(category.updatedAt)}</span>}
               </div>
             </div>
           ) : (

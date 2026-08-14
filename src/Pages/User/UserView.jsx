@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { FiArrowLeft } from "react-icons/fi";
 import { getUserById } from "../../Services/userService";
 import { formatDate } from "../../utils/dateFormatter";
+import { formatStatus } from "../../utils/stringFormatter";
 import toast from "react-hot-toast";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
@@ -47,7 +48,7 @@ export default function UserView() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-6 px-4 w-full">
-      <div className="max-w-3xl mx-auto">
+      <div className="w-full">
         {/* Back Button */}
         <button
           onClick={() => navigate("/home/user")}
@@ -71,34 +72,48 @@ export default function UserView() {
             />
             <div className="text-center sm:text-left sm:mt-12 flex-1">
               <h2 className="text-2xl font-bold text-gray-900">{user.name || "N/A"}</h2>
-              <p className="text-sm font-semibold text-[#0D877F] uppercase tracking-wider">{user.role}</p>
+              {user.role && (
+                <p className="text-sm font-semibold text-[#0D877F] uppercase tracking-wider">
+                  {formatStatus(user.role)}
+                </p>
+              )}
             </div>
           </div>
 
           <hr className="border-gray-100" />
 
           {/* User Details */}
-          <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Phone Number</label>
-              <div className="text-sm font-medium text-gray-800">{user.phoneNumber || "N/A"}</div>
-            </div>
+          {(user.phoneNumber || user.email || user.gender || user.createdAt) && (
+            <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+              {user.phoneNumber && (
+                <div>
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Phone Number</label>
+                  <div className="text-sm font-medium text-gray-800">{user.phoneNumber}</div>
+                </div>
+              )}
 
-            <div>
-              <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Email Address</label>
-              <div className="text-sm font-medium text-gray-800">{user.email || "N/A"}</div>
-            </div>
+              {user.email && (
+                <div>
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Email Address</label>
+                  <div className="text-sm font-medium text-gray-800">{user.email}</div>
+                </div>
+              )}
 
-            <div>
-              <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Gender</label>
-              <div className="text-sm font-medium text-gray-800 capitalize">{user.gender || "Not specified"}</div>
-            </div>
+              {user.gender && (
+                <div>
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Gender</label>
+                  <div className="text-sm font-medium text-gray-800">{formatStatus(user.gender)}</div>
+                </div>
+              )}
 
-            <div>
-              <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Joined Date</label>
-              <div className="text-sm font-medium text-gray-800">{formatDate(user.createdAt)}</div>
+              {user.createdAt && (
+                <div>
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Joined Date</label>
+                  <div className="text-sm font-medium text-gray-800">{formatDate(user.createdAt)}</div>
+                </div>
+              )}
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

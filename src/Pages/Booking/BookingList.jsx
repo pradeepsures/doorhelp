@@ -160,107 +160,200 @@ export default function BookingList() {
           ) : bookings.length === 0 ? (
             <div className="py-20 text-center text-gray-500 font-medium">No bookings found</div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="min-w-full border-collapse">
-                <thead>
-                  <tr className="text-white text-sm uppercase">
-                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Sr No</th>
-                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Booking ID</th>
-                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Customer</th>
-                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Category</th>
-                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Services</th>
-                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Date & Time</th>
-                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Grand Total</th>
-                    <th className="px-6 py-4 text-center font-medium tracking-wider bg-theme-gradient-horizontal">Payment</th>
-                    <th className="px-6 py-4 text-center font-medium tracking-wider bg-theme-gradient-horizontal">Status</th>
-                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Assigned Partner</th>
-                    <th className="px-6 py-4 text-center font-medium tracking-wider bg-theme-gradient-horizontal">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {bookings.map((row, index) => (
-                    <tr key={row._id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4 text-sm font-medium text-gray-700">
-                        {(page - 1) * 10 + index + 1}
-                      </td>
-                      <td className="px-6 py-4 text-sm font-bold text-gray-900">
-                        {row.bookingId}
-                      </td>
-                      <td className="px-6 py-4 text-sm">
-                        <div className="flex flex-col">
-                          <span className="font-semibold text-gray-800">{row.userId?.name || "Guest"}</span>
-                          <span className="text-xs text-gray-500">{row.userId?.phoneNumber || "N/A"}</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-600 font-semibold">
-                        {row.items && Array.isArray(row.items)
-                          ? [...new Set(row.items.map((i) => i.categoryId?.name).filter(Boolean))].join(", ") || "N/A"
-                          : "N/A"}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
-                        <div className="max-w-xs truncate" title={row.items && Array.isArray(row.items) ? row.items.map((i) => `${i.name || "Service"} (x${i.quantity || 1})`).join(", ") : ""}>
-                          {row.items && Array.isArray(row.items) ? row.items.map((i) => `${i.name || "Service"} (x${i.quantity || 1})`).join(", ") : ""}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
-                        <div className="flex flex-col">
-                          <span className="font-medium text-gray-800">{formatDate(row.date)}</span>
-                          <span className="text-xs text-gray-500">{row.timeSlot} ({row.slotType})</span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm font-bold text-gray-800">
-                        ₹{row.grandTotal}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-center">
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${row.paymentStatus === 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                          {row.paymentStatus}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-center">
-                        <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${getStatusBadge(row.bookingStatus)}`}>
-                          {row.bookingStatus}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-sm">
-                        {row.vendorId ? (
+            <>
+              {/* Desktop Table View */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="min-w-full border-collapse">
+                  <thead>
+                    <tr className="text-white text-sm uppercase">
+                      <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Sr No</th>
+                      <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Booking ID</th>
+                      <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Customer</th>
+                      <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Category</th>
+                      <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Services</th>
+                      <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Date & Time</th>
+                      <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Grand Total</th>
+                      <th className="px-6 py-4 text-center font-medium tracking-wider bg-theme-gradient-horizontal">Payment</th>
+                      <th className="px-6 py-4 text-center font-medium tracking-wider bg-theme-gradient-horizontal">Status</th>
+                      <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Assigned Partner</th>
+                      <th className="px-6 py-4 text-center font-medium tracking-wider bg-theme-gradient-horizontal">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {bookings.map((row, index) => (
+                      <tr key={row._id} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-6 py-4 text-sm font-medium text-gray-700">
+                          {(page - 1) * 10 + index + 1}
+                        </td>
+                        <td className="px-6 py-4 text-sm font-bold text-gray-900">
+                          {row.bookingId}
+                        </td>
+                        <td className="px-6 py-4 text-sm">
                           <div className="flex flex-col">
-                            <span className="font-semibold text-gray-800">{row.vendorId.name}</span>
-                            <span className="text-xs text-gray-500">{row.vendorId.phoneNumber}</span>
+                            <span className="font-semibold text-gray-800">{row.userId?.name || "Guest"}</span>
+                            <span className="text-xs text-gray-500">{row.userId?.phoneNumber || "N/A"}</span>
                           </div>
-                        ) : (
-                          <div className="flex flex-col items-start gap-1">
-                            <span className="text-sm italic text-gray-400">Not Assigned</span>
-                            {row.bookingStatus === 'scheduled' || row.bookingStatus === 'pending' || row.bookingStatus === 'declined' ? (
-                              <button
-                                onClick={() => {
-                                  if (row.paymentStatus !== 'paid') {
-                                    toast.error("Booking payment is not paid");
-                                    return;
-                                  }
-                                  setAssigningBooking(row);
-                                }}
-                                className="flex items-center gap-1 text-xs text-[#0D877F] hover:text-[#0a6660] font-bold"
-                              >
-                                <FiUserPlus /> Assign Partner
-                              </button>
-                            ) : null}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-600 font-semibold">
+                          {row.items && Array.isArray(row.items)
+                            ? [...new Set(row.items.map((i) => i.categoryId?.name).filter(Boolean))].join(", ") || "N/A"
+                            : "N/A"}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-600">
+                          <div className="max-w-xs truncate" title={row.items && Array.isArray(row.items) ? row.items.map((i) => `${i.name || "Service"} (x${i.quantity || 1})`).join(", ") : ""}>
+                            {row.items && Array.isArray(row.items) ? row.items.map((i) => `${i.name || "Service"} (x${i.quantity || 1})`).join(", ") : ""}
                           </div>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-center">
+                        </td>
+                        <td className="px-6 py-4 text-sm text-gray-600">
+                          <div className="flex flex-col">
+                            <span className="font-medium text-gray-800">{formatDate(row.date)}</span>
+                            <span className="text-xs text-gray-500">{row.timeSlot} ({row.slotType})</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 text-sm font-bold text-gray-800">
+                          ₹{row.grandTotal}
+                        </td>
+                        <td className="px-6 py-4 text-sm text-center">
+                          <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${row.paymentStatus === 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                            {row.paymentStatus}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-center">
+                          <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${getStatusBadge(row.bookingStatus)}`}>
+                            {row.bookingStatus}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm">
+                          {row.vendorId ? (
+                            <div className="flex flex-col">
+                              <span className="font-semibold text-gray-800">{row.vendorId.name}</span>
+                              <span className="text-xs text-gray-500">{row.vendorId.phoneNumber}</span>
+                            </div>
+                          ) : (
+                            <div className="flex flex-col items-start gap-1">
+                              <span className="text-sm italic text-gray-400">Not Assigned</span>
+                              {row.bookingStatus === 'scheduled' || row.bookingStatus === 'pending' || row.bookingStatus === 'declined' ? (
+                                <button
+                                  onClick={() => {
+                                    if (row.paymentStatus !== 'paid') {
+                                      toast.error("Booking payment is not paid");
+                                      return;
+                                    }
+                                    setAssigningBooking(row);
+                                  }}
+                                  className="flex items-center gap-1 text-xs text-[#0D877F] hover:text-[#0a6660] font-bold"
+                                >
+                                  <FiUserPlus /> Assign Partner
+                                </button>
+                              ) : null}
+                            </div>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 text-center">
+                          <button
+                            onClick={() => navigate(`/home/booking/view/${row._id}`)}
+                            className="p-2 bg-gray-100 hover:bg-[#0D877F] hover:text-white rounded-full text-gray-600 transition-colors"
+                            title="View Details"
+                          >
+                            <FiEye size={16} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile/Tablet Card Grid View */}
+              <div className="block md:hidden grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+                {bookings.map((row, index) => (
+                  <div key={row._id} className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm space-y-3 relative hover:border-[#0D877F] transition-all">
+                    <div className="flex justify-between items-center pb-2 border-b border-gray-100">
+                      <span className="text-sm font-bold text-gray-900">{row.bookingId}</span>
+                      <span className="text-xs font-semibold text-gray-500">#{ (page - 1) * 10 + index + 1 }</span>
+                    </div>
+
+                    <div className="space-y-2 text-xs text-gray-600">
+                      <div>
+                        <strong className="text-gray-500 uppercase text-[9px] block">Customer</strong>
+                        <span className="font-semibold text-gray-850 text-sm">{row.userId?.name || "Guest"}</span>
+                        <span className="text-gray-500 block">{row.userId?.phoneNumber || "N/A"}</span>
+                      </div>
+
+                      <div>
+                        <strong className="text-gray-500 uppercase text-[9px] block">Services</strong>
+                        <span className="font-medium text-gray-700 block truncate" title={row.items && Array.isArray(row.items) ? row.items.map((i) => `${i.name} (x${i.quantity})`).join(", ") : ""}>
+                          {row.items && Array.isArray(row.items) ? row.items.map((i) => `${i.name} (x${i.quantity})`).join(", ") : "N/A"}
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 pt-1">
+                        <div>
+                          <strong className="text-gray-500 uppercase text-[9px] block">Date & Time</strong>
+                          <span className="font-medium text-gray-800">{formatDate(row.date)}</span>
+                          <span className="text-gray-500 block">{row.timeSlot}</span>
+                        </div>
+                        <div>
+                          <strong className="text-gray-500 uppercase text-[9px] block">Grand Total</strong>
+                          <span className="text-sm font-bold text-[#0D877F]">₹{row.grandTotal}</span>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 pt-1 pb-1 border-b border-gray-100">
+                        <div>
+                          <strong className="text-gray-500 uppercase text-[9px] block">Payment</strong>
+                          <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold mt-0.5 ${row.paymentStatus === 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                            {row.paymentStatus}
+                          </span>
+                        </div>
+                        <div>
+                          <strong className="text-gray-500 uppercase text-[9px] block">Status</strong>
+                          <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-bold mt-0.5 ${getStatusBadge(row.bookingStatus)}`}>
+                            {row.bookingStatus}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="pt-1 flex items-center justify-between">
+                        <div>
+                          <strong className="text-gray-500 uppercase text-[9px] block">Assigned Partner</strong>
+                          {row.vendorId ? (
+                            <span className="font-semibold text-gray-800 text-xs">{row.vendorId.name}</span>
+                          ) : (
+                            <div className="flex flex-col items-start gap-1 mt-0.5">
+                              <span className="text-xs italic text-gray-400">Not Assigned</span>
+                              {(row.bookingStatus === 'scheduled' || row.bookingStatus === 'pending' || row.bookingStatus === 'declined') && (
+                                <button
+                                  onClick={() => {
+                                    if (row.paymentStatus !== 'paid') {
+                                      toast.error("Booking payment is not paid");
+                                      return;
+                                    }
+                                    setAssigningBooking(row);
+                                  }}
+                                  className="flex items-center gap-1 text-[10px] text-[#0D877F] hover:text-[#0a6660] font-bold"
+                                >
+                                  <FiUserPlus /> Assign Partner
+                                </button>
+                              )}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Action buttons */}
                         <button
                           onClick={() => navigate(`/home/booking/view/${row._id}`)}
-                          className="p-2 bg-gray-100 hover:bg-[#0D877F] hover:text-white rounded-full text-gray-600 transition-colors"
+                          className="p-2.5 bg-gray-100 hover:bg-[#0D877F] hover:text-white rounded-full text-gray-600 transition-colors shadow-sm"
                           title="View Details"
                         >
                           <FiEye size={16} />
                         </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
           )}
 
           {/* Pagination */}

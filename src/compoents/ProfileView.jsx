@@ -19,6 +19,7 @@ import profileFallback from "../../src/profilelogo.png";
 import axiosInstance from "../api/axios";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../utils/dateFormatter";
+import { formatStatus } from "../utils/stringFormatter";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -119,8 +120,7 @@ const ProfileView = () => {
   return (
     <Box
       sx={{
-        maxWidth: 600,
-        mx: "auto",
+        width: "100%",
         mt: 5,
         p: { xs: 2, sm: 3 },
         bgcolor: "background.default",
@@ -131,6 +131,8 @@ const ProfileView = () => {
           borderRadius: 4,
           boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
           overflow: "visible",
+          maxWidth: 600,
+          mx: "auto",
         }}
       >
         <Box
@@ -157,35 +159,31 @@ const ProfileView = () => {
           />
         </Box>
         <CardContent sx={{ pt: 10, pb: 4 }}>
-          <Typography
-            variant="h5"
-            align="center"
-            gutterBottom
-            sx={{ fontWeight: "bold", color: "text.primary" }}
-          >
-            {user.name || "Admin"}
-          </Typography>
-          <Typography
-            variant="body1"
-            align="center"
-            color="text.secondary"
-            sx={{ mb: 1 }}
-          >
-            {user.email}
-          </Typography>
-          {/* {user.role && (
-            <Box sx={{ mb: 3, textAlign: "center" }}>
-              <Typography variant="body2" color="text.secondary">
-                Role: {user.role.name}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Permissions: {user.role.permission?.length || 0}
-              </Typography>
-            </Box>
-          )} */}
-          <Typography variant="body2" align="center" color="text.secondary">
-            Joined on: {formatDate(user.createdAt)}
-          </Typography>
+          {user.name && (
+            <Typography
+              variant="h5"
+              align="center"
+              gutterBottom
+              sx={{ fontWeight: "bold", color: "text.primary" }}
+            >
+              {formatStatus(user.name)}
+            </Typography>
+          )}
+          {user.email && (
+            <Typography
+              variant="body1"
+              align="center"
+              color="text.secondary"
+              sx={{ mb: 1 }}
+            >
+              {user.email}
+            </Typography>
+          )}
+          {user.createdAt && (
+            <Typography variant="body2" align="center" color="text.secondary">
+              Joined on: {formatDate(user.createdAt)}
+            </Typography>
+          )}
           <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
             <Button
               variant="outlined"
@@ -216,6 +214,8 @@ const ProfileView = () => {
             mt: 3,
             borderRadius: 4,
             boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
+            maxWidth: 600,
+            mx: "auto",
           }}
         >
           <CardContent sx={{ p: 4 }}>
