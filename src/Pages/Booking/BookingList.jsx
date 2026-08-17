@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiEye, FiSearch, FiRefreshCw, FiUserPlus } from "react-icons/fi";
-import { getBookings, assignVendor, getAvailableVendors } from "../../Services/bookingService";
+import { getBookings, assignVendor, getAvailableVendors, updatePaymentStatusToPaid } from "../../Services/bookingService";
 import { getVendors } from "../../Services/vendorService";
 import { formatDate } from "../../utils/dateFormatter";
 import toast from "react-hot-toast";
@@ -88,6 +88,22 @@ export default function BookingList() {
       toast.error(error.message || "Failed to assign vendor");
     } finally {
       setSubmittingAssign(false);
+    }
+  };
+
+  const handleMarkAsPaid = async (bookingId) => {
+    if (!window.confirm(`Are you sure you want to mark booking ${bookingId} as paid?`)) {
+      return;
+    }
+    try {
+      setLoading(true);
+      await updatePaymentStatusToPaid(bookingId);
+      toast.success("Payment status updated to paid");
+      fetchBookings(page, search, statusFilter);
+    } catch (error) {
+      console.error("Error updating payment status:", error);
+      toast.error(error.message || "Failed to update payment status");
+      setLoading(false);
     }
   };
 
@@ -217,9 +233,19 @@ export default function BookingList() {
                           ₹{row.grandTotal}
                         </td>
                         <td className="px-6 py-4 text-sm text-center">
-                          <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${row.paymentStatus === 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                            {row.paymentStatus}
-                          </span>
+                          <div className="flex flex-col items-center gap-1.5">
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${row.paymentStatus === 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                              {row.paymentStatus}
+                            </span>
+                            {row.paymentStatus !== "paid" && (
+                              <button
+                                onClick={() => handleMarkAsPaid(row.bookingId)}
+                                className="px-2.5 py-0.5 bg-[#0D877F] hover:bg-[#0a6660] text-white rounded text-[10px] font-semibold transition-all shadow-sm"
+                              >
+                                Paid
+                              </button>
+                            )}
+                          </div>
                         </td>
                         <td className="px-6 py-4 text-sm text-center">
                           <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${getStatusBadge(row.bookingStatus)}`}>
@@ -305,9 +331,19 @@ export default function BookingList() {
                       <div className="grid grid-cols-2 gap-2 pt-1 pb-1 border-b border-gray-100">
                         <div>
                           <strong className="text-gray-500 uppercase text-[9px] block">Payment</strong>
-                          <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold mt-0.5 ${row.paymentStatus === 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                            {row.paymentStatus}
-                          </span>
+                          <div className="flex items-center gap-2 mt-0.5">
+                            <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold ${row.paymentStatus === 'paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                              {row.paymentStatus}
+                            </span>
+                            {row.paymentStatus !== "paid" && (
+                              <button
+                                onClick={() => handleMarkAsPaid(row.bookingId)}
+                                className="px-2 py-0.5 bg-[#0D877F] hover:bg-[#0a6660] text-white rounded text-[9px] font-semibold transition-all shadow-sm"
+                              >
+                                Paid
+                              </button>
+                            )}
+                          </div>
                         </div>
                         <div>
                           <strong className="text-gray-500 uppercase text-[9px] block">Status</strong>

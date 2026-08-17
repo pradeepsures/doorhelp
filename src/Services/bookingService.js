@@ -75,3 +75,22 @@ export const getAvailableVendors = async (bookingId) => {
   }
   return result;
 };
+
+export const updatePaymentStatusToPaid = async (bookingId) => {
+  const url = `${BASE_URL}/api/v1/admin/bookings/${encodeURIComponent(bookingId)}/payment-status`;
+
+  const res = await fetch(url, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getToken()}`,
+    },
+  });
+
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(result?.error?.message || "Failed to update payment status");
+  }
+  return result;
+};
+
