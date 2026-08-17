@@ -33,14 +33,22 @@
 import React from "react";
 import Profilelogo from "./Profilelogo";
 import { IoMdNotificationsOutline } from "react-icons/io";
+import { HiMenuAlt3 } from "react-icons/hi";
 
-const Navbar = () => {
+const Navbar = ({ toggleSidebar }) => {
   return (
     <div className="h-18 w-full bg-theme-gradient-horizontal shadow-md flex items-center px-6">
       <div className="flex w-full justify-between items-center">
         
-        {/* Title */}
-        <div>
+        {/* Title & Mobile Toggle */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={toggleSidebar}
+            className="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors cursor-pointer flex items-center justify-center"
+            aria-label="Toggle Sidebar"
+          >
+            <HiMenuAlt3 size={24} />
+          </button>
           <h1 className="sm:text-sm md:text-lg lg:text-2xl xl:text-3xl font-bold italic flex text-white tracking-wide">
             DoorHelp
           </h1>

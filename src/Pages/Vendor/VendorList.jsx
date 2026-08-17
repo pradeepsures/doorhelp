@@ -303,7 +303,7 @@ export default function VendorList() {
               </div>
 
               {/* Mobile/Tablet Card Grid View */}
-              <div className="block md:hidden grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+              <div className="grid md:hidden grid-cols-1 sm:grid-cols-2 gap-4 p-4">
                 {vendors.map((row, index) => (
                   <div key={row._id} className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm space-y-3 relative hover:border-[#0D877F] transition-all">
                     <div className="flex items-center gap-3 pb-2 border-b border-gray-100">

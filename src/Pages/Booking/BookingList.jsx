@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiEye, FiSearch, FiRefreshCw, FiUserPlus } from "react-icons/fi";
-import { getBookings, assignVendor } from "../../Services/bookingService";
+import { getBookings, assignVendor, getAvailableVendors } from "../../Services/bookingService";
 import { getVendors } from "../../Services/vendorService";
 import { formatDate } from "../../utils/dateFormatter";
 import toast from "react-hot-toast";
@@ -33,16 +33,6 @@ export default function BookingList() {
     }
   };
 
-  const fetchActiveVendors = async () => {
-    try {
-      // Fetch active vendors to allow assignment
-      const res = await getVendors(1, "", "active");
-      setVendors(res.data || []);
-    } catch (error) {
-      console.error("Error fetching vendors:", error);
-    }
-  };
-
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       fetchBookings(page, search, statusFilter);
@@ -51,8 +41,21 @@ export default function BookingList() {
   }, [page, search, statusFilter]);
 
   useEffect(() => {
-    fetchActiveVendors();
-  }, []);
+    if (!assigningBooking) {
+      setVendors([]);
+      return;
+    }
+    const fetchAvailableVendors = async () => {
+      try {
+        const res = await getAvailableVendors(assigningBooking.bookingId || assigningBooking._id);
+        setVendors(res.data || []);
+      } catch (error) {
+        console.error("Error fetching available vendors:", error);
+        toast.error("Failed to load available vendors");
+      }
+    };
+    fetchAvailableVendors();
+  }, [assigningBooking]);
 
   const handleReset = () => {
     setSearch("");
@@ -265,7 +268,7 @@ export default function BookingList() {
               </div>
 
               {/* Mobile/Tablet Card Grid View */}
-              <div className="block md:hidden grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+              <div className="grid md:hidden grid-cols-1 sm:grid-cols-2 gap-4 p-4">
                 {bookings.map((row, index) => (
                   <div key={row._id} className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm space-y-3 relative hover:border-[#0D877F] transition-all">
                     <div className="flex justify-between items-center pb-2 border-b border-gray-100">

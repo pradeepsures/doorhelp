@@ -6,8 +6,7 @@ import { GiVerticalBanner } from "react-icons/gi";
 import { MdHomeRepairService } from "react-icons/md";
 import { SiMastercard } from "react-icons/si";
 
-const Sidebar = () => {
-  const [open, setOpen] = useState(true);
+const Sidebar = ({ open, setOpen }) => {
   const [activeMenu, setActiveMenu] = useState(0);
   const [activeSubMenu, setActiveSubMenu] = useState(null);
   const [openMenus, setOpenMenus] = useState({});
@@ -30,11 +29,11 @@ const Sidebar = () => {
       { name: "Booking", link: "/home/booking", icon: MdOutlineCalendarToday },
 
     {
-      name: "Services",
+      name: "Service Management",
       icon: MdHomeRepairService,
       submenus: [
         { name: "Category", link: "/home/category" },
-        { name: "Sub Category", link: "/home/subcategory" },
+        { name: "Services", link: "/home/subcategory" },
       ],
     },
 
@@ -62,13 +61,11 @@ const Sidebar = () => {
   ];
 
   return (
-    <section className="flex">
-      <div className="relative">
-        {/* Sidebar */}
-        <aside
-          className={`bg-theme-gradient-vertical h-screen shadow-lg
-          ${open ? "w-[260px]" : "w-20"} duration-500 text-white flex flex-col`}
-        >
+    <aside
+      className={`bg-theme-gradient-vertical h-screen shadow-lg text-white flex flex-col transition-all duration-300 z-50
+      fixed md:static top-0 bottom-0 left-0
+      ${open ? "translate-x-0 w-[260px]" : "-translate-x-full md:translate-x-0 w-0 md:w-20 overflow-hidden"}`}
+    >
           {/* Logo */}
           <div className="flex flex-col items-center justify-center mt-4 mb-4 px-4">
             <img
@@ -149,6 +146,9 @@ const Sidebar = () => {
                               e.stopPropagation();
                               setActiveMenu(index);
                               setActiveSubMenu(sub.link);
+                              if (window.innerWidth < 768) {
+                                setOpen(false);
+                              }
                             }}
                             className={`text-sm transition-colors p-2 rounded-md block ${
                               activeSubMenu === sub.link
@@ -169,6 +169,9 @@ const Sidebar = () => {
                       setActiveMenu(index);
                       setActiveSubMenu(null);
                       setOpenMenus({});
+                      if (window.innerWidth < 768) {
+                        setOpen(false);
+                      }
                     }}
                     className={`group flex items-center rounded-md mb-1
                       ${
@@ -204,11 +207,7 @@ const Sidebar = () => {
               </div>
             ))}
           </div>
-        </aside>
-      </div>
-
-      <section className="w-full"></section>
-    </section>
+    </aside>
   );
 };
 

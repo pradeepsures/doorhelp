@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FiArrowLeft, FiMapPin, FiCalendar, FiDollarSign, FiClock, FiUser, FiInfo } from "react-icons/fi";
-import { getBookingById, assignVendor } from "../../Services/bookingService";
+import { getBookingById, assignVendor, getAvailableVendors } from "../../Services/bookingService";
 import { getVendors } from "../../Services/vendorService";
 import { formatDate } from "../../utils/dateFormatter";
 import { formatStatus } from "../../utils/stringFormatter";
@@ -38,16 +38,17 @@ export default function BookingView() {
   }, [id]);
 
   useEffect(() => {
-    const fetchActiveVendors = async () => {
+    if (!id) return;
+    const fetchAvailableVendors = async () => {
       try {
-        const res = await getVendors(1, "", "active");
+        const res = await getAvailableVendors(id);
         setVendors(res.data || []);
       } catch (error) {
-        console.error("Error fetching vendors:", error);
+        console.error("Error fetching available vendors:", error);
       }
     };
-    fetchActiveVendors();
-  }, []);
+    fetchAvailableVendors();
+  }, [id]);
 
   const handleAssignPartner = async (e) => {
     e.preventDefault();

@@ -58,3 +58,20 @@ export const getBookingById = async (bookingId) => {
   }
   return result;
 };
+
+export const getAvailableVendors = async (bookingId) => {
+  const url = `${BASE_URL}/api/v1/admin/bookings/${encodeURIComponent(bookingId)}/available-vendors`;
+
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+  });
+
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(result?.error?.message || "Failed to fetch available vendors");
+  }
+  return result;
+};
