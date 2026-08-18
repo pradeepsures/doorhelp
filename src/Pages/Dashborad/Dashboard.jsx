@@ -6,8 +6,10 @@ import {
 import { motion } from "framer-motion";
 import { getDashboardStats } from "../../Services/dashboardService";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [filterType, setFilterType] = useState("Last 7 Days"); // Options: "Last 7 Days", "This Month", "This Year"
@@ -46,10 +48,10 @@ const Dashboard = () => {
   };
 
   const stats = [
-    { title: "Total Users", value: data.totalUsers.toLocaleString(), icon: FiUsers, color: "bg-blue-100 text-blue-600" },
-    { title: "Total Partners", value: data.totalVendors.toLocaleString(), icon: FiBriefcase, color: "bg-[#0D877F]/20 text-[#0D877F]" },
+    { title: "Total Users", value: data.totalUsers.toLocaleString(), icon: FiUsers, color: "bg-blue-100 text-blue-600", path: "/home/user" },
+    { title: "Total Partners", value: data.totalVendors.toLocaleString(), icon: FiBriefcase, color: "bg-[#0D877F]/20 text-[#0D877F]", path: "/home/vendor" },
     { title: "Total Earnings", value: formatCurrency(data.totalEarnings), icon: FiDollarSign, color: "bg-yellow-100 text-yellow-600" },
-    { title: "Active Bookings", value: data.totalActiveBookings.toLocaleString(), icon: FiTrendingUp, color: "bg-purple-100 text-purple-600" },
+    { title: "Active Bookings", value: data.totalActiveBookings.toLocaleString(), icon: FiTrendingUp, color: "bg-purple-100 text-purple-600", path: "/home/booking" },
   ];
 
   // Resolve chart details based on select filter option
@@ -99,7 +101,8 @@ const Dashboard = () => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between transition-transform hover:-translate-y-1 hover:shadow-md cursor-pointer"
+                onClick={() => stat.path && navigate(stat.path)}
+                className={`bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between transition-transform hover:-translate-y-1 hover:shadow-md ${stat.path ? "cursor-pointer" : "cursor-default"}`}
               >
                 <div>
                   <p className="text-sm font-medium text-gray-500 mb-1">{stat.title}</p>

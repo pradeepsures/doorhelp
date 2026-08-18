@@ -268,7 +268,29 @@ export default function BookingView() {
                 <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2 border-b pb-2">
                   <FiMapPin className="text-[#0D877F]" /> Service Location
                 </h2>
-                <p className="text-gray-700 font-semibold mb-2">{booking.address}</p>
+                {typeof booking.address === "string" ? (
+                  <p className="text-gray-700 font-semibold mb-2">{booking.address}</p>
+                ) : (
+                  <div className="text-gray-700 space-y-1">
+                    {booking.address.name && (
+                      <p className="font-bold text-gray-800">Contact Person: {booking.address.name}</p>
+                    )}
+                    {booking.address.mobile && (
+                      <p className="text-sm font-medium text-gray-600">Mobile: {booking.address.mobile}</p>
+                    )}
+                    <p className="font-semibold mt-1">
+                      {[
+                        booking.address.houseFlat,
+                        booking.address.locality,
+                        booking.address.landmark ? `Near ${booking.address.landmark}` : null,
+                        booking.address.city,
+                        booking.address.state,
+                        booking.address.pin ? `PIN: ${booking.address.pin}` : null,
+                        booking.address.country
+                      ].filter(Boolean).join(", ") || booking.address.address}
+                    </p>
+                  </div>
+                )}
                 
                 {userLat && userLong && (
                   <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
