@@ -45,6 +45,8 @@ const Sidebar = ({ open, setOpen }) => {
       submenus: [
         { name: "Pincodes", link: "/home/pincode" },
         { name: "Localities", link: "/home/locality" },
+        { name: "Coupon", link: "/home/coupon" },
+        { name: "Platform Fee", link: "/home/platform-fee" },
       ],
     },
 

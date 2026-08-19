@@ -32,6 +32,12 @@ import PincodeList from "./Pages/Pincode/PincodeList";
 import PincodeForm from "./Pages/Pincode/PincodeForm";
 import LocalityList from "./Pages/Locality/LocalityList";
 import LocalityForm from "./Pages/Locality/LocalityForm";
+import CouponList from "./Pages/Coupon/CouponList";
+import CouponForm from "./Pages/Coupon/CouponForm";
+import CouponView from "./Pages/Coupon/CouponView";
+import PlatformFeeList from "./Pages/PlatformFee/PlatformFeeList";
+import PlatformFeeForm from "./Pages/PlatformFee/PlatformFeeForm";
+import PlatformFeeView from "./Pages/PlatformFee/PlatformFeeView";
 
 const router = createBrowserRouter([
   {
@@ -77,6 +83,14 @@ const router = createBrowserRouter([
       { path: "locality", element: <LocalityList /> },
       { path: "locality/create", element: <LocalityForm /> },
       { path: "locality/edit/:id", element: <LocalityForm /> },
+      { path: "coupon", element: <CouponList /> },
+      { path: "coupon/create", element: <CouponForm /> },
+      { path: "coupon/edit/:id", element: <CouponForm /> },
+      { path: "coupon/view/:id", element: <CouponView /> },
+      { path: "platform-fee", element: <PlatformFeeList /> },
+      { path: "platform-fee/create", element: <PlatformFeeForm /> },
+      { path: "platform-fee/edit/:id", element: <PlatformFeeForm /> },
+      { path: "platform-fee/view/:id", element: <PlatformFeeView /> },
     ],
   },
   {
