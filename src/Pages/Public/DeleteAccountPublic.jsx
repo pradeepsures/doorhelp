@@ -80,13 +80,13 @@ const DeleteAccountPublic = () => {
             </div>
 
             {/* Warning Alert Block */}
-            <div className="bg-rose-500/10 border border-rose-500/30 rounded-xl p-4 mb-6 flex gap-3 text-slate-350 text-xs leading-relaxed">
+            {/* <div className="bg-rose-500/10 border border-rose-500/30 rounded-xl p-4 mb-6 flex gap-3 text-slate-350 text-xs leading-relaxed">
               <ShieldAlert className="w-5 h-5 text-rose-500 shrink-0" />
               <div>
                 <strong className="text-rose-400 block font-semibold mb-0.5">Warning: This action is permanent!</strong>
                 Deleting your account will result in the loss of all your booking history, profile details, and any active wallet balance. This cannot be undone.
               </div>
-            </div>
+            </div> */}
 
             <form onSubmit={handleSendOtp} className="space-y-4">
               {/* Role Toggle Selector */}
