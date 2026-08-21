@@ -17,6 +17,18 @@ export const getCmsContent = async (type, pageName) => {
   return result;
 };
 
+export const getPublicCmsContent = async (type, pageName) => {
+  const res = await fetch(`${BASE_URL}/api/v1/common/cms/${type}/${pageName}`, {
+    method: "GET",
+  });
+
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(result?.message || "Failed to fetch cms content");
+  }
+  return result;
+};
+
 export const updateCmsContent = async (type, pageName, content) => {
   const res = await fetch(`${BASE_URL}/api/v1/admin/cms/${type}/${pageName}`, {
     method: "PUT",

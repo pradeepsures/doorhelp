@@ -38,6 +38,9 @@ import CouponView from "./Pages/Coupon/CouponView";
 import PlatformFeeList from "./Pages/PlatformFee/PlatformFeeList";
 import PlatformFeeForm from "./Pages/PlatformFee/PlatformFeeForm";
 import PlatformFeeView from "./Pages/PlatformFee/PlatformFeeView";
+import PrivacyPolicyPublic from "./Pages/Public/PrivacyPolicyPublic";
+import AboutUsPublic from "./Pages/Public/AboutUsPublic";
+import DeleteAccountPublic from "./Pages/Public/DeleteAccountPublic";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +50,18 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/privacy-policy",
+    element: <PrivacyPolicyPublic />,
+  },
+  {
+    path: "/about-us",
+    element: <AboutUsPublic />,
+  },
+  {
+    path: "/delete-account",
+    element: <DeleteAccountPublic />,
   },
   {
     path: "/home",
