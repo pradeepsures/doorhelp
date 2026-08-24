@@ -1,0 +1,194 @@
+[33mcommit 7bcdb828dc9349f2736ef3af05ad1474f219c231[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: pradeepsures <pradeepkuamrnp0507@gmail.com>
+Date:   Mon Aug 24 11:33:08 2026 +0530
+
+    slot
+
+[33mcommit 9c39194386053f3c4116b01bddd806c2476070f7[m
+Author: pradeepsures <pradeepkuamrnp0507@gmail.com>
+Date:   Fri Aug 21 16:35:31 2026 +0530
+
+    delte account page
+
+[33mcommit 3d905549ca4532badaaaa3e75740ccf6cd0d986c[m
+Author: pradeepsures <pradeepkuamrnp0507@gmail.com>
+Date:   Fri Aug 21 16:27:46 2026 +0530
+
+    delete account
+
+[33mcommit 7621b9969d7f7eebab7708a63f144970e150dc37[m
+Author: pradeepsures <pradeepkuamrnp0507@gmail.com>
+Date:   Wed Aug 19 10:44:10 2026 +0530
+
+    coupon
+
+[33mcommit 7eabd086bfd376d1e15f8155a015eda7c70594d6[m
+Author: pradeepsures <pradeepkuamrnp0507@gmail.com>
+Date:   Tue Aug 18 11:48:08 2026 +0530
+
+    booking view page
+
+[33mcommit f2fb87224e7125bc32598f5333b6083b4d27c6c1[m
+Author: pradeepsures <pradeepkuamrnp0507@gmail.com>
+Date:   Mon Aug 17 16:06:00 2026 +0530
+
+    paid booking
+
+[33mcommit 564a15f4f18fafb20dc8e307db1f56963d56ca3b[m
+Author: pradeepsures <pradeepkuamrnp0507@gmail.com>
+Date:   Mon Aug 17 12:59:42 2026 +0530
+
+    cms page ui change
+
+[33mcommit 6f5cc355ee7590370a9a68cd024f722c31f66da4[m
+Author: pradeepsures <pradeepkuamrnp0507@gmail.com>
+Date:   Fri Aug 14 13:05:31 2026 +0530
+
+    booking view page
+
+[33mcommit a2bab852a5f9553cbb9570d9fabff6bd8f8e21c0[m
+Author: pradeepsures <pradeepkuamrnp0507@gmail.com>
+Date:   Thu Aug 13 13:05:44 2026 +0530
+
+    pincode
+
+[33mcommit d53f6903f44467f563231b733b6969ce977b978a[m
+Author: pradeepsures <pradeepkuamrnp0507@gmail.com>
+Date:   Wed Aug 12 13:58:40 2026 +0530
+
+    booking view
+
+[33mcommit 5d6669e388baf0b7c3181042e9a18a009488f84a[m
+Author: pradeepsures <pradeepkuamrnp0507@gmail.com>
+Date:   Tue Aug 11 14:02:43 2026 +0530
+
+    booking list
+
+[33mcommit a89c777bb136ced39d16c68deff5ecb355a6d071[m
+Author: pradeepsures <pradeepkuamrnp0507@gmail.com>
+Date:   Mon Aug 10 18:40:10 2026 +0530
+
+    side bar
+
+[33mcommit 12fa437e8e6db3fefc0d490ecd6cba791e1e69ae[m
+Author: pradeepsures <pradeepkuamrnp0507@gmail.com>
+Date:   Mon Aug 10 16:29:05 2026 +0530
+
+    category
+
+[33mcommit 183c8abf7a60f7b0c174da9ad5408fcd14b50f6f[m
+Author: pradeepsures <pradeepkuamrnp0507@gmail.com>
+Date:   Mon Aug 10 14:06:10 2026 +0530
+
+    git file
+
+[33mcommit 4ad5f3f24891997cb32013e4804890c814b395be[m
+Author: pradeepsures <pradeepkuamrnp0507@gmail.com>
+Date:   Mon Aug 10 14:01:09 2026 +0530
+
+    user vendor master
+
+[33mcommit 8303101c11fb928bcca94d4dc3909d8cf0fea8a3[m
+Author: pradeepsures <pradeepkuamrnp0507@gmail.com>
+Date:   Fri Aug 7 12:38:14 2026 +0530
+
+    category
+
+[33mcommit d42e4d0d45641dfc0f94774feb86618fdd2c8d2f[m
+Author: pradeepsures <pradeepkuamrnp0507@gmail.com>
+Date:   Thu Aug 6 14:33:06 2026 +0530
+
+    vendor on baording
+
+[33mcommit fa8307f5383d3365c38f6ed5bc9996ad8381b8bc[m
+Author: pradeepsures <pradeepkuamrnp0507@gmail.com>
+Date:   Wed Aug 5 18:04:28 2026 +0530
+
+    first commit
+
+[33mcommit 9cb58ff7b52bdc9c85cd51c1a7a4615863acd205[m
+Merge: 23a56ca 737f8be
+Author: pradeep kumar <137015366+pradeepsures@users.noreply.github.com>
+Date:   Mon Apr 6 10:11:57 2026 +0530
+
+    Merge pull request #5 from pradeepsures/grid_frontend
+    
+    Grid frontend
+
+[33mcommit 737f8be45b544a31f9bc0e53a67cd83fa97f6328[m
+Author: pradeepsures <pradeepkumarnp0507@gmail.com>
+Date:   Mon Apr 6 10:10:32 2026 +0530
+
+    changes
+
+[33mcommit 082fc555a0c9ed820d495ee39abd7885cc10e5a0[m
+Author: pradeepsures <pradeepkumarnp0507@gmail.com>
+Date:   Wed Mar 18 17:34:29 2026 +0530
+
+    policy update
+
+[33mcommit 23a56caaa1e36dd44ce50f97b3d7214941fc481f[m
+Merge: db8ff04 d878052
+Author: pradeep kumar <137015366+pradeepsures@users.noreply.github.com>
+Date:   Wed Mar 18 17:27:46 2026 +0530
+
+    Merge pull request #4 from pradeepsures/grid_frontend
+    
+    terms and policy editor apply
+
+[33mcommit d878052c8d1d88b4ca59be80ae5c1986de16d4df[m
+Author: pradeepsures <pradeepkumarnp0507@gmail.com>
+Date:   Wed Mar 18 17:25:30 2026 +0530
+
+    terms and policy editor apply
+
+[33mcommit db8ff04d3376ae13e06e91dcf7a49b7aa9efe2f1[m
+Merge: 176d261 ab2d5dc
+Author: pradeep kumar <137015366+pradeepsures@users.noreply.github.com>
+Date:   Fri Feb 27 17:42:51 2026 +0530
+
+    Merge pull request #3 from pradeepsures/grid_frontend
+    
+    updated code
+
+[33mcommit ab2d5dc2fc6d8a9c16693caf9fa579dda6ced218[m
+Author: pradeepsures <pradeepkumarnp0507@gmail.com>
+Date:   Fri Feb 27 17:40:59 2026 +0530
+
+    updated code
+
+[33mcommit 176d261145b756f26de07a0e59c091f908780326[m
+Merge: 273d3e5 8e24d9c
+Author: pradeep kumar <137015366+pradeepsures@users.noreply.github.com>
+Date:   Mon Feb 16 17:35:31 2026 +0530
+
+    Merge pull request #2 from pradeepsures/grid_frontend
+    
+    dashboard
+
+[33mcommit 8e24d9c99552878d071d5b6caa0920eb8fb653bf[m
+Author: pradeepsures <pradeepkumarnp0507@gmail.com>
+Date:   Mon Feb 16 17:34:08 2026 +0530
+
+    dashboard
+
+[33mcommit 273d3e5c3336d90930a367f1f372fb73796feee5[m
+Merge: a89dbd3 080be0b
+Author: pradeep kumar <137015366+pradeepsures@users.noreply.github.com>
+Date:   Fri Feb 6 17:59:21 2026 +0530
+
+    Merge pull request #1 from pradeepsures/grid_frontend
+    
+    member uploaded
+
+[33mcommit 080be0bf225d805eaa61f398afdab0112c18de6c[m
+Author: pradeepsures <pradeepkumarnp0507@gmail.com>
+Date:   Fri Feb 6 17:57:41 2026 +0530
+
+    member uploaded
+
+[33mcommit a89dbd3c16d83c6c72ddc733356eb5e726e1868e[m
+Author: pradeepsures <pradeepkumarnp0507@gmail.com>
+Date:   Wed Feb 4 18:25:24 2026 +0530
+
+    first commit
