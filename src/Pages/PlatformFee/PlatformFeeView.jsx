@@ -122,9 +122,9 @@ const PlatformFeeView = () => {
           <div className="p-6 space-y-6">
             <div className="grid grid-cols-2 gap-6 border-b border-gray-100 pb-6">
               <div>
-                <span className="text-xs text-gray-500 block">Platform Fee Amount</span>
+                <span className="text-xs text-gray-500 block">Platform Fee Percentage</span>
                 <span className="text-xl font-bold text-gray-800">
-                  ₹{feeData.platformFee.toFixed(2)}
+                  {feeData.platformFee}%
                 </span>
               </div>
 

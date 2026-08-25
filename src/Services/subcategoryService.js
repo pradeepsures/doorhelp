@@ -148,3 +148,65 @@ export const deleteIncludedService = async (id) => {
   }
   return result;
 };
+
+export const getVariants = async (subCategoryId) => {
+  const res = await fetch(`${BASE_URL}/api/v1/admin/subcategory/${subCategoryId}/variants`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+  });
+
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(result?.error?.message || result?.message || "Failed to fetch variants");
+  }
+  return result;
+};
+
+export const createVariant = async (subCategoryId, formData) => {
+  const res = await fetch(`${BASE_URL}/api/v1/admin/subcategory/${subCategoryId}/variants`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+    body: formData,
+  });
+
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(result?.error?.message || result?.message || "Failed to create variant");
+  }
+  return result;
+};
+
+export const updateVariant = async (id, formData) => {
+  const res = await fetch(`${BASE_URL}/api/v1/admin/subcategory/variants/${id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+    body: formData,
+  });
+
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(result?.error?.message || result?.message || "Failed to update variant");
+  }
+  return result;
+};
+
+export const deleteVariant = async (id) => {
+  const res = await fetch(`${BASE_URL}/api/v1/admin/subcategory/variants/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+  });
+
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(result?.error?.message || result?.message || "Failed to delete variant");
+  }
+  return result;
+};

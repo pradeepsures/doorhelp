@@ -22,6 +22,7 @@ const SubcategoryForm = () => {
     price: "",
     originalPrice: "",
     status: true,
+    hasVariants: false,
   });
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
@@ -67,6 +68,7 @@ const SubcategoryForm = () => {
         price: sub.price,
         originalPrice: sub.originalPrice || "",
         status: sub.status,
+        hasVariants: sub.hasVariants || false,
       });
       setUserRequirements(sub.userRequirements || []);
       setEquipments(sub.equipments || []);
@@ -130,6 +132,7 @@ const SubcategoryForm = () => {
       payload.append("originalPrice", Number(formData.originalPrice));
     }
     payload.append("status", formData.status);
+    payload.append("hasVariants", formData.hasVariants);
     payload.append("userRequirements", JSON.stringify(userRequirements));
     payload.append("equipments", JSON.stringify(equipments));
     
@@ -402,18 +405,34 @@ const SubcategoryForm = () => {
               </div>
 
               {/* Status Switch Toggle */}
-              <div className="flex items-center">
-                <label className="inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    name="status"
-                    checked={formData.status}
-                    onChange={handleChange}
-                    className="sr-only peer"
-                  />
-                  <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#0D877F]/50 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0D877F]"></div>
-                  <span className="ms-3 text-sm font-semibold text-gray-700">Active Status</span>
-                </label>
+               <div className="flex flex-col md:flex-row gap-6">
+                <div className="flex items-center">
+                  <label className="inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="status"
+                      checked={formData.status}
+                      onChange={handleChange}
+                      className="sr-only peer"
+                    />
+                    <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#0D877F]/50 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0D877F]"></div>
+                    <span className="ms-3 text-sm font-semibold text-gray-700">Active Status</span>
+                  </label>
+                </div>
+
+                <div className="flex items-center">
+                  <label className="inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="hasVariants"
+                      checked={formData.hasVariants}
+                      onChange={handleChange}
+                      className="sr-only peer"
+                    />
+                    <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#0D877F]/50 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0D877F]"></div>
+                    <span className="ms-3 text-sm font-semibold text-gray-700">Has Flow Variants (e.g. Gas Refill, No Cooling)</span>
+                  </label>
+                </div>
               </div>
 
               {/* Action Buttons */}

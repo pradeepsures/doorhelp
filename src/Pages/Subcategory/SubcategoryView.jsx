@@ -334,6 +334,86 @@ const SubcategoryView = () => {
             </div>
           )}
 
+          {/* CARD: FLOW VARIANTS GRID */}
+          {subcategory.hasVariants && subcategory.variants && subcategory.variants.length > 0 && (
+            <div className="bg-white rounded-2xl border border-slate-100 p-4 shadow-sm space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                    Available Flow Variants
+                  </h3>
+                  <span className="px-2 py-0.2 bg-[#0D877F]/10 text-[#0D877F] rounded text-[9px] font-bold">
+                    {subcategory.variants.length} Options
+                  </span>
+                </div>
+                
+                <Link
+                  to={`/home/subcategory/${subcategory._id}/variants`}
+                  className="text-[10px] font-bold text-[#0D877F] hover:underline flex items-center gap-0.5"
+                >
+                  <Plus size={12} /> Manage Variants
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {subcategory.variants.map((v, idx) => (
+                  <motion.div 
+                    key={idx}
+                    whileHover={{ y: -2, boxShadow: "0 6px 12px -2px rgba(0, 0, 0, 0.04)" }}
+                    className="flex flex-col bg-slate-50 border border-slate-100 hover:border-[#0D877F]/20 rounded-xl p-3.5 transition-all duration-300 group justify-between"
+                  >
+                    <div className="flex gap-3">
+                      <div className="w-16 h-16 shrink-0 rounded-lg overflow-hidden border border-slate-200 bg-white relative">
+                        <img 
+                          src={`${BASE_URL}${v.image}`} 
+                          alt={v.name} 
+                          className="w-full h-full object-cover"
+                          onError={(e) => { e.target.src = "https://via.placeholder.com/80x80?text=Variant" }}
+                        />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1 text-white">
+                          <button
+                            onClick={() => setModalImage(`${BASE_URL}${v.image}`)}
+                            className="p-0.5 bg-white/20 hover:bg-white/40 border border-white/30 rounded transition"
+                            title="Zoom"
+                          >
+                            <Maximize2 size={10} />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="space-y-1 overflow-hidden">
+                        <h4 className="text-xs font-bold text-slate-800 truncate">{v.name}</h4>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-xs font-extrabold text-[#0D877F]">₹{v.price}</span>
+                          {v.originalPrice && (
+                            <span className="text-[10px] text-slate-400 line-through">₹{v.originalPrice}</span>
+                          )}
+                        </div>
+                        {v.description && (
+                          <p className="text-[10px] text-slate-500 line-clamp-2 leading-relaxed">{v.description}</p>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {subcategory.hasVariants && (!subcategory.variants || subcategory.variants.length === 0) && (
+            <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm text-center">
+              <Layers className="text-[#0D877F]/60 mx-auto mb-2 animate-pulse" size={32} />
+              <h4 className="text-xs font-bold text-slate-800">No Variants Added Yet</h4>
+              <p className="text-[10px] text-slate-500 mt-1">This subcategory has flow variants enabled, but no variants have been created.</p>
+              <Link
+                to={`/home/subcategory/${subcategory._id}/variants`}
+                className="mt-3 inline-flex items-center gap-1 px-3.5 py-1.5 bg-[#0D877F] text-white rounded-lg text-xs font-bold hover:bg-opacity-95 transition"
+              >
+                <Plus size={12} /> Add Variants Now
+              </Link>
+            </div>
+          )}
+
           {/* CARD 4: INCLUDED SERVICES GRID */}
           {subcategory.includedServices && subcategory.includedServices.length > 0 && (
             <div className="bg-white rounded-2xl border border-slate-100 p-4 shadow-sm space-y-3">

@@ -156,7 +156,7 @@ export default function PlatformFeeList() {
                           {index + 1}
                         </td>
                         <td className="px-6 py-3 text-sm font-bold text-gray-800">
-                          ₹{row.platformFee.toFixed(2)}
+                          {row.platformFee}%
                         </td>
                         <td className="px-6 py-3 text-sm font-semibold text-gray-700">
                           {row.gst}%

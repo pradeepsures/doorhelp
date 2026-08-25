@@ -274,7 +274,14 @@ export default function SubcategoryList() {
                           />
                         </td>
                         <td className="px-6 py-3 text-sm font-semibold text-gray-800">
-                          {row.name}
+                          <div className="flex flex-col">
+                            <span>{row.name}</span>
+                            {row.hasVariants && (
+                              <span className="mt-1 w-max px-2 py-0.5 rounded-full text-[10px] bg-indigo-50 text-indigo-600 font-semibold border border-indigo-100">
+                                Variants Enabled
+                              </span>
+                            )}
+                          </div>
                         </td>
                         <td className="px-6 py-3 text-sm text-gray-600 font-medium">
                           {row.categoryId?.name || "N/A"}
@@ -344,6 +351,20 @@ export default function SubcategoryList() {
                                     <FiPlus size={15} /> Include Services
                                   </button>
                                 </li>
+
+                                {row.hasVariants && (
+                                  <li>
+                                    <button
+                                      onClick={() => {
+                                        setOpenMenuId(null);
+                                        navigate(`/home/subcategory/${row._id}/variants`);
+                                      }}
+                                      className="w-full px-4 py-2.5 hover:bg-emerald-50 flex items-center gap-3 text-emerald-600 transition-colors font-medium"
+                                    >
+                                      <FiPlus size={15} /> Manage Variants
+                                    </button>
+                                  </li>
+                                )}
 
                                 <li>
                                   <button

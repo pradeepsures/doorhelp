@@ -56,11 +56,11 @@ const PlatformFeeForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.platformFee === "" || Number(formData.platformFee) < 0) {
-      return toast.error("Platform fee must be 0 or greater");
+    if (formData.platformFee === "" || Number(formData.platformFee) < 0 || Number(formData.platformFee) > 100) {
+      return toast.error("Platform fee must be between 0 and 100");
     }
-    if (formData.gst === "" || Number(formData.gst) < 0) {
-      return toast.error("GST percentage must be 0 or greater");
+    if (formData.gst === "" || Number(formData.gst) < 0 || Number(formData.gst) > 100) {
+      return toast.error("GST percentage must be between 0 and 100");
     }
 
     setSubmitting(true);
@@ -104,7 +104,7 @@ const PlatformFeeForm = () => {
             {isEdit ? "Edit Platform Fee Settings" : "Create Platform Fee Settings"}
           </h1>
           <p className="text-gray-500 text-sm">
-            {isEdit ? "Modify platform fee amount and GST configuration" : "Set global platform fee amount and GST percentages"}
+            {isEdit ? "Modify platform fee percentage and GST configuration" : "Set global platform fee percentage and GST percentages"}
           </p>
         </div>
 
@@ -114,7 +114,7 @@ const PlatformFeeForm = () => {
               {/* Platform Fee */}
               <div>
                 <label htmlFor="platformFee" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Platform Fee Amount (₹)
+                  Platform Fee Percentage (%)
                 </label>
                 <input
                   type="number"
@@ -122,9 +122,10 @@ const PlatformFeeForm = () => {
                   name="platformFee"
                   value={formData.platformFee}
                   onChange={handleChange}
-                  placeholder="e.g. 20"
+                  placeholder="e.g. 5"
                   className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0D877F] text-sm text-gray-700"
                   min="0"
+                  max="100"
                   step="any"
                   required
                 />
