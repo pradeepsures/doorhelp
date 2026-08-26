@@ -121,8 +121,7 @@ export default function SubcategoryList() {
       "Sr No": index + 1,
       Name: item.name || "",
       Category: item.categoryId?.name || "",
-      Price: item.price || 0,
-      "Original Price": item.originalPrice || "",
+      "Starting Price": item.startingPrice || 0,
       Status: item.status ? "Active" : "Inactive",
       Deleted: item.isDeleted ? "Yes" : "No",
       "Created At": item.createdAt ? formatDate(item.createdAt) : "",
@@ -247,8 +246,7 @@ export default function SubcategoryList() {
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Image</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Name</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Category</th>
-                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Price</th>
-                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Original Price</th>
+                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Starting Price</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Status</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Created Date</th>
                     <th className="px-6 py-4 text-right font-medium tracking-wider bg-theme-gradient-horizontal">Actions</th>
@@ -276,21 +274,13 @@ export default function SubcategoryList() {
                         <td className="px-6 py-3 text-sm font-semibold text-gray-800">
                           <div className="flex flex-col">
                             <span>{row.name}</span>
-                            {row.hasVariants && (
-                              <span className="mt-1 w-max px-2 py-0.5 rounded-full text-[10px] bg-indigo-50 text-indigo-600 font-semibold border border-indigo-100">
-                                Variants Enabled
-                              </span>
-                            )}
                           </div>
                         </td>
                         <td className="px-6 py-3 text-sm text-gray-600 font-medium">
                           {row.categoryId?.name || "N/A"}
                         </td>
                         <td className="px-6 py-3 text-sm text-gray-800 font-semibold">
-                          ₹{row.price}
-                        </td>
-                        <td className="px-6 py-3 text-sm text-gray-400 line-through">
-                          {row.originalPrice ? `₹${row.originalPrice}` : "-"}
+                          ₹{row.startingPrice || 0}
                         </td>
                         <td className="px-6 py-3 text-sm">
                           <span className={`px-3 py-1 rounded-full text-xs font-medium ${row.status ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}>
@@ -344,27 +334,13 @@ export default function SubcategoryList() {
                                   <button
                                     onClick={() => {
                                       setOpenMenuId(null);
-                                      navigate(`/home/subcategory/${row._id}/included-services`);
+                                      navigate(`/home/subcategory/${row._id}/variants`);
                                     }}
-                                    className="w-full px-4 py-2.5 hover:bg-purple-50 flex items-center gap-3 text-purple-600 transition-colors font-medium"
+                                    className="w-full px-4 py-2.5 hover:bg-emerald-50 flex items-center gap-3 text-emerald-600 transition-colors font-medium"
                                   >
-                                    <FiPlus size={15} /> Include Services
+                                    <FiPlus size={15} /> Manage Variants
                                   </button>
                                 </li>
-
-                                {row.hasVariants && (
-                                  <li>
-                                    <button
-                                      onClick={() => {
-                                        setOpenMenuId(null);
-                                        navigate(`/home/subcategory/${row._id}/variants`);
-                                      }}
-                                      className="w-full px-4 py-2.5 hover:bg-emerald-50 flex items-center gap-3 text-emerald-600 transition-colors font-medium"
-                                    >
-                                      <FiPlus size={15} /> Manage Variants
-                                    </button>
-                                  </li>
-                                )}
 
                                 <li>
                                   <button

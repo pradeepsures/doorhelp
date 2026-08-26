@@ -271,6 +271,12 @@ export default function VariantManager() {
                         {/* Footer Actions */}
                         <div className="border-t border-gray-50 px-4 py-3 bg-gray-50/50 flex justify-end gap-2">
                           <button
+                            onClick={() => navigate(`/home/subcategory/${subCategoryId}/variants/${v._id}/included-services`)}
+                            className="p-1.5 bg-purple-50 text-purple-600 hover:bg-purple-100 rounded transition duration-150 text-xs font-semibold flex items-center gap-1"
+                          >
+                            <FiPlus size={13} /> Included Services
+                          </button>
+                          <button
                             onClick={() => handleEditClick(v)}
                             className="p-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded transition duration-150 text-xs font-semibold flex items-center gap-1"
                           >

@@ -11,7 +11,6 @@ const SlotForm = () => {
   const [date, setDate] = useState("");
   const [slotType, setSlotType] = useState("morning");
   const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
   const [status, setStatus] = useState(true);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -73,12 +72,12 @@ const SlotForm = () => {
             
             const timeStr = res.data.timeSlot || "";
             if (timeStr.includes("-")) {
-              const [start, end] = timeStr.split("-");
+              const [start] = timeStr.split("-");
               setStartTime(convertTo24Hour(start.trim()));
-              setEndTime(convertTo24Hour(end.trim()));
+            } else if (timeStr) {
+              setStartTime(convertTo24Hour(timeStr.trim()));
             } else {
               setStartTime("");
-              setEndTime("");
             }
             
             setStatus(res.data.status !== false);
@@ -98,7 +97,6 @@ const SlotForm = () => {
     } else {
       // Set default time slot for the morning type
       setStartTime("06:00");
-      setEndTime("09:00");
     }
   }, [id, isEdit]);
 
@@ -116,19 +114,15 @@ const SlotForm = () => {
       return toast.error("Date must be between today and the next 7 days");
     }
 
-    if (!startTime || !endTime) {
-      return toast.error("Start and end time are required");
-    }
-
-    if (startTime >= endTime) {
-      return toast.error("End time must be later than start time");
+    if (!startTime) {
+      return toast.error("Time is required");
     }
 
     setSubmitting(true);
     const payload = {
       date,
       slotType,
-      timeSlot: `${convertTo12Hour(startTime)} - ${convertTo12Hour(endTime)}`,
+      timeSlot: convertTo12Hour(startTime),
       status
     };
 
@@ -206,34 +200,19 @@ const SlotForm = () => {
               </select>
             </div>
 
-            {/* Time Range Pickers */}
-            <div className="flex gap-4 mb-3">
-              <div className="w-1/2">
-                <label htmlFor="startTime" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Start Time
-                </label>
-                <input
-                  id="startTime"
-                  type="time"
-                  value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0D877F] text-sm text-gray-700 bg-white"
-                  required
-                />
-              </div>
-              <div className="w-1/2">
-                <label htmlFor="endTime" className="block text-sm font-semibold text-gray-700 mb-2">
-                  End Time
-                </label>
-                <input
-                  id="endTime"
-                  type="time"
-                  value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0D877F] text-sm text-gray-700 bg-white"
-                  required
-                />
-              </div>
+            {/* Time Picker */}
+            <div>
+              <label htmlFor="startTime" className="block text-sm font-semibold text-gray-700 mb-2">
+                Time
+              </label>
+              <input
+                id="startTime"
+                type="time"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0D877F] text-sm text-gray-700 bg-white"
+                required
+              />
             </div>
 
             {/* Status Selector */}

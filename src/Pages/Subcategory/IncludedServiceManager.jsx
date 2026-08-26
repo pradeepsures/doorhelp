@@ -14,10 +14,11 @@ import toast from "react-hot-toast";
 const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
 
 export default function IncludedServiceManager() {
-  const { subCategoryId } = useParams();
+  const { subCategoryId, variantId } = useParams();
   const navigate = useNavigate();
 
   const [subcategory, setSubcategory] = useState(null);
+  const [variant, setVariant] = useState(null);
   const [includedServices, setIncludedServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -33,14 +34,19 @@ export default function IncludedServiceManager() {
     try {
       setLoading(true);
       const subRes = await getSubcategoryById(subCategoryId);
-      setSubcategory(subRes.data);
+      const sub = subRes.data;
+      setSubcategory(sub);
 
-      const servicesRes = await getIncludedServices(subCategoryId);
+      // Find variant
+      const currentVariant = sub.variants?.find(v => v._id === variantId);
+      setVariant(currentVariant);
+
+      const servicesRes = await getIncludedServices(variantId);
       setIncludedServices(servicesRes.data || []);
     } catch (err) {
       console.error("Error loading included services:", err);
       toast.error(err.message || "Failed to load details");
-      navigate("/home/subcategory");
+      navigate(`/home/subcategory/${subCategoryId}/variants`);
     } finally {
       setLoading(false);
     }
@@ -48,7 +54,7 @@ export default function IncludedServiceManager() {
 
   useEffect(() => {
     fetchData();
-  }, [subCategoryId]);
+  }, [subCategoryId, variantId]);
 
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -112,7 +118,7 @@ export default function IncludedServiceManager() {
         await updateIncludedService(editingId, payload);
         toast.success("Included service updated successfully");
       } else {
-        await createIncludedService(subCategoryId, payload);
+        await createIncludedService(variantId, payload);
         toast.success("Included service added successfully");
       }
       resetForm();
@@ -130,16 +136,16 @@ export default function IncludedServiceManager() {
         {/* Back and Header */}
         <div className="flex items-center mb-6">
           <button
-            onClick={() => navigate("/home/subcategory")}
+            onClick={() => navigate(`/home/subcategory/${subCategoryId}/variants`)}
             className="mr-4 p-2 bg-white rounded-full text-gray-600 hover:text-[#0D877F] shadow-sm hover:shadow transition border border-gray-100 focus:outline-none"
           >
             <MdArrowBack className="text-xl" />
           </button>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Include Services</h1>
-            {subcategory && (
+            <h1 className="text-2xl font-bold text-gray-900">Included Services</h1>
+            {subcategory && variant && (
               <p className="text-sm text-gray-500 font-medium">
-                Manage what is included in: <span className="text-[#0D877F] font-semibold">{subcategory.name}</span>
+                Manage included services for variant: <span className="text-[#0D877F] font-semibold">{variant.name}</span> (<span className="text-slate-500 font-medium">{subcategory.name}</span>)
               </p>
             )}
           </div>

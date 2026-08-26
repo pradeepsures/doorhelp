@@ -88,7 +88,7 @@ const router = createBrowserRouter([
       { path: "subcategory/create", element: <SubcategoryForm /> },
       { path: "subcategory/edit/:id", element: <SubcategoryForm /> },
       { path: "subcategory/view/:id", element: <SubcategoryView /> },
-      { path: "subcategory/:subCategoryId/included-services", element: <IncludedServiceManager /> },
+      { path: "subcategory/:subCategoryId/variants/:variantId/included-services", element: <IncludedServiceManager /> },
       { path: "subcategory/:subCategoryId/variants", element: <VariantManager /> },
       { path: "user", element: <UserList /> },
       { path: "user/view/:id", element: <UserView /> },

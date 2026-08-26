@@ -60,7 +60,12 @@ const CategoryView = () => {
                 <div>
                   <h2 className="text-2xl font-bold text-gray-800 mb-1">{category.name}</h2>
                   {category._id && (
-                    <p className="text-xs text-gray-400 font-medium">Category ID: {category._id}</p>
+                    <p className="text-xs text-gray-400 font-medium mb-1">Category ID: {category._id}</p>
+                  )}
+                  {category.subcategoryCount !== undefined && (
+                    <p className="text-sm font-semibold text-[#0D877F]">
+                      Subcategories Count: {category.subcategoryCount}
+                    </p>
                   )}
                 </div>
                 {category.status !== undefined && category.status !== null && (
@@ -93,6 +98,41 @@ const CategoryView = () => {
                         e.target.src = "https://via.placeholder.com/400x200?text=No+Image";
                       }}
                     />
+                  </div>
+                </div>
+              )}
+
+              {/* Associated Subcategories */}
+              {category.subcategories && category.subcategories.length > 0 && (
+                <div className="pt-6 border-t border-gray-100">
+                  <h3 className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-4">
+                    Subcategories in this Category
+                  </h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    {category.subcategories.map((sub, idx) => {
+                      const subImg = sub.image
+                        ? `${BASE_URL}${sub.image}`
+                        : "https://via.placeholder.com/150x150?text=No+Image";
+                      return (
+                        <div
+                          key={sub._id || idx}
+                          onClick={() => navigate(`/home/subcategory/view/${sub._id}`)}
+                          className="bg-gray-50 rounded-xl p-3 border border-gray-150 flex flex-col items-center justify-center text-center hover:shadow-md hover:border-[#0D877F] transition-all cursor-pointer group"
+                        >
+                          <img
+                            src={subImg}
+                            alt={sub.name}
+                            className="w-20 h-20 object-cover rounded-lg border border-gray-200 mb-2 group-hover:scale-105 transition-transform"
+                            onError={(e) => {
+                              e.target.src = "https://via.placeholder.com/150x150?text=No+Image";
+                            }}
+                          />
+                          <span className="text-xs font-semibold text-gray-700 group-hover:text-[#0D877F] transition-colors line-clamp-2">
+                            {sub.name}
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}

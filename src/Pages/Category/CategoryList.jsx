@@ -96,6 +96,7 @@ export default function CategoryList() {
     const formattedData = categories.map((item, index) => ({
       "Sr No": index + 1,
       Name: item.name || "",
+      "Subcategories Count": item.subcategoryCount ?? 0,
       Status: item.status ? "Active" : "Inactive",
       Deleted: item.isDeleted ? "Yes" : "No",
       "Created At": item.createdAt ? formatDate(item.createdAt) : "",
@@ -202,6 +203,7 @@ export default function CategoryList() {
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Sr No</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Image</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Name</th>
+                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Subcategories Count</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Status</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Created Date</th>
                     <th className="px-6 py-4 text-right font-medium tracking-wider bg-theme-gradient-horizontal">Actions</th>
@@ -228,6 +230,9 @@ export default function CategoryList() {
                         </td>
                         <td className="px-6 py-3 text-sm font-semibold text-gray-800">
                           {row.name}
+                        </td>
+                        <td className="px-6 py-3 text-sm font-semibold text-[#0D877F]">
+                          {row.subcategoryCount ?? 0}
                         </td>
                         <td className="px-6 py-3 text-sm">
                           <span className={`px-3 py-1 rounded-full text-xs font-medium ${row.status ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}>

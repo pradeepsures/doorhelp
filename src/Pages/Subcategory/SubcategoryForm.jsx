@@ -19,19 +19,13 @@ const SubcategoryForm = () => {
     categoryId: "",
     name: "",
     description: "",
-    price: "",
-    originalPrice: "",
+    startingPrice: "",
     status: true,
-    hasVariants: false,
   });
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [userRequirements, setUserRequirements] = useState([]);
-  const [userReqInput, setUserReqInput] = useState("");
-  const [equipments, setEquipments] = useState([]);
-  const [equipmentInput, setEquipmentInput] = useState("");
 
   // Fetch active categories to populate dropdown
   useEffect(() => {
@@ -65,13 +59,9 @@ const SubcategoryForm = () => {
         categoryId: sub.categoryId?._id || sub.categoryId || "",
         name: sub.name,
         description: sub.description || "",
-        price: sub.price,
-        originalPrice: sub.originalPrice || "",
+        startingPrice: sub.startingPrice || 0,
         status: sub.status,
-        hasVariants: sub.hasVariants || false,
       });
-      setUserRequirements(sub.userRequirements || []);
-      setEquipments(sub.equipments || []);
       if (sub.image) {
         setImagePreview(`${BASE_URL}${sub.image}`);
       }
@@ -110,12 +100,8 @@ const SubcategoryForm = () => {
       toast.error("Subcategory name is required");
       return;
     }
-    if (formData.price === "" || Number(formData.price) < 0) {
-      toast.error("Price must be a valid positive number");
-      return;
-    }
-    if (formData.originalPrice !== "" && Number(formData.originalPrice) < 0) {
-      toast.error("Original price cannot be negative");
+    if (formData.startingPrice !== "" && Number(formData.startingPrice) < 0) {
+      toast.error("Starting price must be a valid positive number");
       return;
     }
     if (!isEditMode && !image) {
@@ -127,14 +113,8 @@ const SubcategoryForm = () => {
     payload.append("categoryId", formData.categoryId);
     payload.append("name", formData.name.trim());
     payload.append("description", formData.description.trim());
-    payload.append("price", Number(formData.price));
-    if (formData.originalPrice !== "") {
-      payload.append("originalPrice", Number(formData.originalPrice));
-    }
+    payload.append("startingPrice", Number(formData.startingPrice || 0));
     payload.append("status", formData.status);
-    payload.append("hasVariants", formData.hasVariants);
-    payload.append("userRequirements", JSON.stringify(userRequirements));
-    payload.append("equipments", JSON.stringify(equipments));
     
     if (image) {
       payload.append("image", image);
@@ -235,40 +215,21 @@ const SubcategoryForm = () => {
                 />
               </div>
 
-              {/* Prices Section */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Price (₹) <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="number"
-                    name="price"
-                    value={formData.price}
-                    onChange={handleChange}
-                    min="0"
-                    step="any"
-                    placeholder="0.00"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D877F] focus:border-[#0D877F] focus:outline-none text-sm transition duration-150"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Original Price (₹) <span className="text-gray-400 font-normal">(Optional)</span>
-                  </label>
-                  <input
-                    type="number"
-                    name="originalPrice"
-                    value={formData.originalPrice}
-                    onChange={handleChange}
-                    min="0"
-                    step="any"
-                    placeholder="0.00"
-                    className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D877F] focus:border-[#0D877F] focus:outline-none text-sm transition duration-150"
-                  />
-                </div>
+              {/* Starting Price Section */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Starting Price (₹) <span className="text-gray-400 font-normal">(Optional)</span>
+                </label>
+                <input
+                  type="number"
+                  name="startingPrice"
+                  value={formData.startingPrice}
+                  onChange={handleChange}
+                  min="0"
+                  step="any"
+                  placeholder="0.00"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D877F] focus:border-[#0D877F] focus:outline-none text-sm transition duration-150"
+                />
               </div>
 
               {/* Image Section */}
@@ -296,143 +257,19 @@ const SubcategoryForm = () => {
                 />
               </div>
 
-              {/* User Requirements Section */}
-              <div className="bg-gray-50 rounded-xl p-5 border border-gray-200">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  User Requirements (e.g. Keep water, Keep stair)
-                </label>
-                <div className="flex gap-2 mb-3">
-                  <input
-                    type="text"
-                    value={userReqInput}
-                    onChange={(e) => setUserReqInput(e.target.value)}
-                    placeholder="Add a user requirement..."
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D877F] focus:outline-none text-sm bg-white"
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                        if (userReqInput.trim()) {
-                          setUserRequirements([...userRequirements, userReqInput.trim()]);
-                          setUserReqInput("");
-                        }
-                      }
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (userReqInput.trim()) {
-                        setUserRequirements([...userRequirements, userReqInput.trim()]);
-                        setUserReqInput("");
-                      }
-                    }}
-                    className="px-4 py-2 bg-[#0D877F] text-white rounded-lg hover:bg-[#0b7069] transition text-sm font-medium"
-                  >
-                    Add
-                  </button>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {userRequirements.map((req, index) => (
-                    <span key={index} className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#0D877F]/10 text-[#0D877F] rounded-full text-xs font-medium border border-[#0D877F]/20">
-                      {req}
-                      <button
-                        type="button"
-                        onClick={() => setUserRequirements(userRequirements.filter((_, i) => i !== index))}
-                        className="hover:text-red-600 font-bold ml-1 focus:outline-none text-sm"
-                      >
-                        &times;
-                      </button>
-                    </span>
-                  ))}
-                  {userRequirements.length === 0 && (
-                    <span className="text-gray-400 text-xs italic">No requirements added yet.</span>
-                  )}
-                </div>
-              </div>
-
-              {/* Equipments Section */}
-              <div className="bg-gray-50 rounded-xl p-5 border border-gray-200">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Equipments Provided (e.g. Sanitizer, Clothes, Pump Pressure)
-                </label>
-                <div className="flex gap-2 mb-3">
-                  <input
-                    type="text"
-                    value={equipmentInput}
-                    onChange={(e) => setEquipmentInput(e.target.value)}
-                    placeholder="Add an equipment..."
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D877F] focus:outline-none text-sm bg-white"
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                        if (equipmentInput.trim()) {
-                          setEquipments([...equipments, equipmentInput.trim()]);
-                          setEquipmentInput("");
-                        }
-                      }
-                    }}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (equipmentInput.trim()) {
-                        setEquipments([...equipments, equipmentInput.trim()]);
-                        setEquipmentInput("");
-                      }
-                    }}
-                    className="px-4 py-2 bg-[#0D877F] text-white rounded-lg hover:bg-[#0b7069] transition text-sm font-medium"
-                  >
-                    Add
-                  </button>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {equipments.map((eq, index) => (
-                    <span key={index} className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium border border-blue-100">
-                      {eq}
-                      <button
-                        type="button"
-                        onClick={() => setEquipments(equipments.filter((_, i) => i !== index))}
-                        className="hover:text-red-600 font-bold ml-1 focus:outline-none text-sm"
-                      >
-                        &times;
-                      </button>
-                    </span>
-                  ))}
-                  {equipments.length === 0 && (
-                    <span className="text-gray-400 text-xs italic">No equipments added yet.</span>
-                  )}
-                </div>
-              </div>
-
               {/* Status Switch Toggle */}
-               <div className="flex flex-col md:flex-row gap-6">
-                <div className="flex items-center">
-                  <label className="inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      name="status"
-                      checked={formData.status}
-                      onChange={handleChange}
-                      className="sr-only peer"
-                    />
-                    <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#0D877F]/50 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0D877F]"></div>
-                    <span className="ms-3 text-sm font-semibold text-gray-700">Active Status</span>
-                  </label>
-                </div>
-
-                <div className="flex items-center">
-                  <label className="inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      name="hasVariants"
-                      checked={formData.hasVariants}
-                      onChange={handleChange}
-                      className="sr-only peer"
-                    />
-                    <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#0D877F]/50 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0D877F]"></div>
-                    <span className="ms-3 text-sm font-semibold text-gray-700">Has Flow Variants (e.g. Gas Refill, No Cooling)</span>
-                  </label>
-                </div>
+              <div className="flex items-center">
+                <label className="inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    name="status"
+                    checked={formData.status}
+                    onChange={handleChange}
+                    className="sr-only peer"
+                  />
+                  <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#0D877F]/50 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0D877F]"></div>
+                  <span className="ms-3 text-sm font-semibold text-gray-700">Active Status</span>
+                </label>
               </div>
 
               {/* Action Buttons */}

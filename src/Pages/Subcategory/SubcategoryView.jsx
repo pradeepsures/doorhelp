@@ -129,11 +129,11 @@ const SubcategoryView = () => {
         {!loading && subcategory && (
           <div className="flex items-center gap-2">
             <Link
-              to={`/home/subcategory/${subcategory._id}/included-services`}
+              to={`/home/subcategory/${subcategory._id}/variants`}
               className="px-3.5 py-2 bg-white border border-slate-200 hover:border-[#0D877F] hover:text-[#0D877F] text-slate-700 rounded-lg text-xs font-bold transition-all shadow flex items-center gap-1.5"
             >
               <Layers size={14} />
-              <span>Manage Services</span>
+              <span>Manage Variants</span>
             </Link>
             <Link
               to={`/home/subcategory/edit/${subcategory._id}`}
@@ -198,27 +198,12 @@ const SubcategoryView = () => {
               {/* Right Column */}
               <div className="space-y-1">
                 <DetailRow 
-                  label="Booking Base Price" 
+                  label="Starting Price" 
                   value={
-                    subcategory.price !== undefined && subcategory.price !== null ? (
+                    subcategory.startingPrice !== undefined && subcategory.startingPrice !== null ? (
                       <span className="text-base font-extrabold text-[#0D877F]">
-                        ₹{subcategory.price}
+                        ₹{subcategory.startingPrice}
                       </span>
-                    ) : null
-                  } 
-                />
-                <DetailRow 
-                  label="Original Base Price" 
-                  value={
-                    subcategory.originalPrice ? (
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-slate-400 line-through text-xs">₹{subcategory.originalPrice}</span>
-                        {discountPercentage > 0 && (
-                          <span className="bg-emerald-50 text-emerald-700 text-[9px] font-bold px-1.5 py-0.2 rounded border border-emerald-100">
-                            {discountPercentage}% OFF
-                          </span>
-                        )}
-                      </div>
                     ) : null
                   } 
                 />
@@ -286,56 +271,10 @@ const SubcategoryView = () => {
             </div>
           )}
 
-          {/* CARD 3: SPECIFICATIONS & REQUIREMENTS */}
-          {((subcategory.userRequirements && subcategory.userRequirements.length > 0) || 
-            (subcategory.equipments && subcategory.equipments.length > 0)) && (
-            <div className="bg-white rounded-2xl border border-slate-100 p-4 shadow-sm">
-              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 pb-2 border-b border-slate-100 flex items-center gap-1.5">
-                <Wrench size={13} className="text-[#0D877F]" /> Service Guidelines & Rules
-              </h3>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                {/* User Requirements */}
-                {subcategory.userRequirements && subcategory.userRequirements.length > 0 && (
-                  <div className="bg-teal-50/20 rounded-xl border border-teal-100/50 p-3.5 space-y-2">
-                    <h4 className="text-[10px] font-bold text-[#0D877F] uppercase tracking-widest flex items-center gap-1.5">
-                      <UserCheck size={14} />
-                      <span>Required from Customer</span>
-                    </h4>
-                    <ul className="space-y-1.5">
-                      {subcategory.userRequirements.map((req, idx) => (
-                        <li key={idx} className="flex items-start gap-1.5 text-xs text-slate-700 font-medium">
-                          <CheckCircle2 size={13} className="text-[#0D877F] mt-0.5 shrink-0" />
-                          <span>{req}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {/* Equipments Provided */}
-                {subcategory.equipments && subcategory.equipments.length > 0 && (
-                  <div className="bg-blue-50/15 rounded-xl border border-blue-100/50 p-3.5 space-y-2">
-                    <h4 className="text-[10px] font-bold text-blue-700 uppercase tracking-widest flex items-center gap-1.5">
-                      <Wrench size={14} />
-                      <span>Equipments Provided by Partner</span>
-                    </h4>
-                    <ul className="space-y-1.5">
-                      {subcategory.equipments.map((eq, idx) => (
-                        <li key={idx} className="flex items-start gap-1.5 text-xs text-slate-700 font-medium">
-                          <CheckCircle2 size={13} className="text-blue-500 mt-0.5 shrink-0" />
-                          <span>{eq}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+          {/* Service Guidelines & Rules are managed at the Variant level */}
 
           {/* CARD: FLOW VARIANTS GRID */}
-          {subcategory.hasVariants && subcategory.variants && subcategory.variants.length > 0 && (
+          {subcategory.variants && subcategory.variants.length > 0 && (
             <div className="bg-white rounded-2xl border border-slate-100 p-4 shadow-sm space-y-3">
               <div className="flex items-center justify-between pb-2 border-b border-slate-100">
                 <div className="flex items-center gap-2">
@@ -360,7 +299,7 @@ const SubcategoryView = () => {
                   <motion.div 
                     key={idx}
                     whileHover={{ y: -2, boxShadow: "0 6px 12px -2px rgba(0, 0, 0, 0.04)" }}
-                    className="flex flex-col bg-slate-50 border border-slate-100 hover:border-[#0D877F]/20 rounded-xl p-3.5 transition-all duration-300 group justify-between"
+                    className="flex flex-col bg-slate-50 border border-slate-100 hover:border-[#0D877F]/20 rounded-xl p-3.5 transition-all duration-300 group justify-between gap-3"
                   >
                     <div className="flex gap-3">
                       <div className="w-16 h-16 shrink-0 rounded-lg overflow-hidden border border-slate-200 bg-white relative">
@@ -381,7 +320,7 @@ const SubcategoryView = () => {
                         </div>
                       </div>
 
-                      <div className="space-y-1 overflow-hidden">
+                      <div className="space-y-1 overflow-hidden flex-1">
                         <h4 className="text-xs font-bold text-slate-800 truncate">{v.name}</h4>
                         <div className="flex items-center gap-1.5">
                           <span className="text-xs font-extrabold text-[#0D877F]">₹{v.price}</span>
@@ -394,17 +333,65 @@ const SubcategoryView = () => {
                         )}
                       </div>
                     </div>
+
+                    {/* Variant Requirements & Equipments */}
+                    {((v.userRequirements && v.userRequirements.length > 0) || (v.equipments && v.equipments.length > 0)) && (
+                      <div className="space-y-1.5 pt-1.5 border-t border-slate-200/50">
+                        {v.userRequirements && v.userRequirements.length > 0 && (
+                          <div className="flex flex-wrap gap-1">
+                            {v.userRequirements.map((r, i) => (
+                              <span key={i} className="px-1.5 py-0.2 bg-teal-50 text-teal-700 rounded text-[9px] font-medium border border-teal-100">
+                                Req: {r}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        {v.equipments && v.equipments.length > 0 && (
+                          <div className="flex flex-wrap gap-1">
+                            {v.equipments.map((eq, i) => (
+                              <span key={i} className="px-1.5 py-0.2 bg-blue-50 text-blue-700 rounded text-[9px] font-medium border border-blue-100">
+                                Eq: {eq}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Variant Included Services list */}
+                    {v.includedServices && v.includedServices.length > 0 && (
+                      <div className="pt-2 border-t border-slate-200/50 space-y-1">
+                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider block">Included:</span>
+                        <div className="flex flex-wrap gap-1">
+                          {v.includedServices.map((inc, i) => (
+                            <div key={i} className="relative w-8 h-8 rounded border border-slate-200 overflow-hidden bg-white" title={inc.title}>
+                              <img src={`${BASE_URL}${inc.image}`} className="w-full h-full object-cover" onError={(e) => { e.target.src="https://via.placeholder.com/40x40" }} />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Action link */}
+                    <div className="pt-2 border-t border-slate-200/50 flex justify-end">
+                      <Link
+                        to={`/home/subcategory/${subcategory._id}/variants/${v._id}/included-services`}
+                        className="text-[10px] font-bold text-[#0D877F] hover:text-[#0A6B65] transition flex items-center gap-1"
+                      >
+                        <Plus size={10} /> Manage Included Services
+                      </Link>
+                    </div>
                   </motion.div>
                 ))}
               </div>
             </div>
           )}
 
-          {subcategory.hasVariants && (!subcategory.variants || subcategory.variants.length === 0) && (
+          {(!subcategory.variants || subcategory.variants.length === 0) && (
             <div className="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm text-center">
               <Layers className="text-[#0D877F]/60 mx-auto mb-2 animate-pulse" size={32} />
               <h4 className="text-xs font-bold text-slate-800">No Variants Added Yet</h4>
-              <p className="text-[10px] text-slate-500 mt-1">This subcategory has flow variants enabled, but no variants have been created.</p>
+              <p className="text-[10px] text-slate-500 mt-1">This subcategory requires variants to be created.</p>
               <Link
                 to={`/home/subcategory/${subcategory._id}/variants`}
                 className="mt-3 inline-flex items-center gap-1 px-3.5 py-1.5 bg-[#0D877F] text-white rounded-lg text-xs font-bold hover:bg-opacity-95 transition"
@@ -428,10 +415,10 @@ const SubcategoryView = () => {
                 </div>
                 
                 <Link
-                  to={`/home/subcategory/${subcategory._id}/included-services`}
+                  to={`/home/subcategory/${subcategory._id}/variants`}
                   className="text-[10px] font-bold text-[#0D877F] hover:underline flex items-center gap-0.5"
                 >
-                  <Plus size={12} /> Manage Included Items
+                  Manage via Variants
                 </Link>
               </div>
 

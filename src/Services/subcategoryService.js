@@ -87,8 +87,8 @@ export const deleteSubcategory = async (id) => {
   return result;
 };
 
-export const getIncludedServices = async (subCategoryId) => {
-  const res = await fetch(`${BASE_URL}/api/v1/admin/subcategory/${subCategoryId}/included-services`, {
+export const getIncludedServices = async (variantId) => {
+  const res = await fetch(`${BASE_URL}/api/v1/admin/subcategory/variants/${variantId}/included-services`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${getToken()}`,
@@ -102,8 +102,8 @@ export const getIncludedServices = async (subCategoryId) => {
   return result;
 };
 
-export const createIncludedService = async (subCategoryId, formData) => {
-  const res = await fetch(`${BASE_URL}/api/v1/admin/subcategory/${subCategoryId}/included-services`, {
+export const createIncludedService = async (variantId, formData) => {
+  const res = await fetch(`${BASE_URL}/api/v1/admin/subcategory/variants/${variantId}/included-services`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${getToken()}`,

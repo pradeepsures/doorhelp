@@ -225,9 +225,11 @@ export default function BookingView() {
                 </h2>
                 <div className="space-y-4">
                   {booking.items.map((item, sIndex) => {
-                    const imageSrc = item.subcategoryId?.image
-                      ? `${BACKEND_URL}${item.subcategoryId.image}`
-                      : "https://via.placeholder.com/80x80?text=Service";
+                    const imageSrc = item.variantId?.image
+                      ? `${BACKEND_URL}${item.variantId.image}`
+                      : item.subcategoryId?.image
+                        ? `${BACKEND_URL}${item.subcategoryId.image}`
+                        : "https://via.placeholder.com/80x80?text=Service";
                     return (
                       <div key={sIndex} className="flex gap-4 items-center">
                         <img
@@ -237,15 +239,22 @@ export default function BookingView() {
                           onError={(e) => { e.target.src = "https://via.placeholder.com/80x80?text=Service" }}
                         />
                         <div className="flex-1">
-                          <h4 className="font-semibold text-gray-800">{item.name}</h4>
+                          <h4 className="font-semibold text-gray-800">
+                            {item.subcategoryId?.name || item.name}
+                          </h4>
+                          {item.subcategoryId?.name && item.name && item.subcategoryId.name !== item.name && (
+                            <span className="text-xs font-semibold text-[#0D877F] block">
+                              Variant: {item.name}
+                            </span>
+                          )}
                           {item.categoryId?.name && (
-                            <span className="inline-block bg-[#0D877F]/10 text-[#0D877F] text-[10px] font-bold px-2 py-0.5 rounded-full mb-1">
+                            <span className="inline-block bg-[#0D877F]/10 text-[#0D877F] text-[10px] font-bold px-2 py-0.5 rounded-full mb-1 mt-1">
                               {item.categoryId.name}
                             </span>
                           )}
-                          {item.subcategoryId?.description && (
+                          {(item.variantId?.description || item.subcategoryId?.description) && (
                             <span className="text-xs text-gray-500 block">
-                              {item.subcategoryId.description}
+                              {item.variantId?.description || item.subcategoryId?.description}
                             </span>
                           )}
                           <div className="text-sm text-gray-600 font-medium">
