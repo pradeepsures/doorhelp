@@ -322,10 +322,18 @@ const SubcategoryView = () => {
 
                       <div className="space-y-1 overflow-hidden flex-1">
                         <h4 className="text-xs font-bold text-slate-800 truncate">{v.name}</h4>
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-extrabold text-[#0D877F]">₹{v.price}</span>
-                          {v.originalPrice && (
-                            <span className="text-[10px] text-slate-400 line-through">₹{v.originalPrice}</span>
+                        <div className="flex flex-col gap-0.5">
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-xs font-extrabold text-[#0D877F]">₹{v.price}</span>
+                            {v.originalPrice && (
+                              <span className="text-[10px] text-slate-400 line-through">₹{v.originalPrice}</span>
+                            )}
+                          </div>
+                          {v.duration && (
+                            <div className="flex items-center gap-1 text-[10px] text-slate-500 font-medium">
+                              <Clock size={10} className="text-[#0D877F]" /> 
+                              <span>{v.duration} mins</span>
+                            </div>
                           )}
                         </div>
                         {v.description && (

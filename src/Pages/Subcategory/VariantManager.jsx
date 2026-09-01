@@ -28,6 +28,7 @@ export default function VariantManager() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [originalPrice, setOriginalPrice] = useState("");
+  const [duration, setDuration] = useState("");
   const [status, setStatus] = useState(true);
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
@@ -73,6 +74,7 @@ export default function VariantManager() {
     setDescription("");
     setPrice("");
     setOriginalPrice("");
+    setDuration("");
     setStatus(true);
     setImage(null);
     setImagePreview("");
@@ -88,6 +90,7 @@ export default function VariantManager() {
     setDescription(variant.description || "");
     setPrice(variant.price);
     setOriginalPrice(variant.originalPrice || "");
+    setDuration(variant.duration || "");
     setStatus(variant.status);
     setImage(null);
     setImagePreview(variant.image ? `${BASE_URL}${variant.image}` : "");
@@ -131,6 +134,9 @@ export default function VariantManager() {
     payload.append("price", Number(price));
     if (originalPrice !== "") {
       payload.append("originalPrice", Number(originalPrice));
+    }
+    if (duration !== "") {
+      payload.append("duration", Number(duration));
     }
     payload.append("status", status);
     payload.append("userRequirements", JSON.stringify(userRequirements));
@@ -231,6 +237,7 @@ export default function VariantManager() {
                             />
                             <div className="absolute top-2 left-2 bg-black/60 backdrop-blur-sm text-white text-xs px-2.5 py-1 rounded font-bold">
                               ₹{v.price} {v.originalPrice && <span className="line-through text-gray-300 font-normal ml-1">₹{v.originalPrice}</span>}
+                              {v.duration && <span className="ml-2 font-normal text-green-300">({v.duration} min)</span>}
                             </div>
                             {!v.status && (
                               <div className="absolute top-2 right-2 bg-gray-600 text-white text-xs px-2 py-0.5 rounded font-semibold">
@@ -368,6 +375,19 @@ export default function VariantManager() {
                         value={originalPrice}
                         onChange={(e) => setOriginalPrice(e.target.value)}
                         placeholder="0.00"
+                        min="0"
+                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D877F] focus:border-[#0D877F] focus:outline-none text-sm transition duration-150"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">
+                        Duration (mins)
+                      </label>
+                      <input
+                        type="number"
+                        value={duration}
+                        onChange={(e) => setDuration(e.target.value)}
+                        placeholder="0"
                         min="0"
                         className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0D877F] focus:border-[#0D877F] focus:outline-none text-sm transition duration-150"
                       />
