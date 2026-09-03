@@ -39,6 +39,9 @@ import CouponView from "./Pages/Coupon/CouponView";
 import PlatformFeeList from "./Pages/PlatformFee/PlatformFeeList";
 import PlatformFeeForm from "./Pages/PlatformFee/PlatformFeeForm";
 import PlatformFeeView from "./Pages/PlatformFee/PlatformFeeView";
+import ReferAndEarnList from "./Pages/ReferAndEarn/ReferAndEarnList";
+import ReferAndEarnForm from "./Pages/ReferAndEarn/ReferAndEarnForm";
+import ReferAndEarnView from "./Pages/ReferAndEarn/ReferAndEarnView";
 import PrivacyPolicyPublic from "./Pages/Public/PrivacyPolicyPublic";
 import AboutUsPublic from "./Pages/Public/AboutUsPublic";
 import DeleteAccountPublic from "./Pages/Public/DeleteAccountPublic";
@@ -108,6 +111,10 @@ const router = createBrowserRouter([
       { path: "platform-fee/create", element: <PlatformFeeForm /> },
       { path: "platform-fee/edit/:id", element: <PlatformFeeForm /> },
       { path: "platform-fee/view/:id", element: <PlatformFeeView /> },
+      { path: "refer-and-earn", element: <ReferAndEarnList /> },
+      { path: "refer-and-earn/create", element: <ReferAndEarnForm /> },
+      { path: "refer-and-earn/edit/:id", element: <ReferAndEarnForm /> },
+      { path: "refer-and-earn/view/:id", element: <ReferAndEarnView /> },
     ],
   },
   {
