@@ -47,7 +47,6 @@ const Sidebar = ({ open, setOpen }) => {
         { name: "Localities", link: "/home/locality" },
         { name: "Coupon", link: "/home/coupon" },
         { name: "Platform Fee", link: "/home/platform-fee" },
-        { name: "Slots", link: "/home/slot" },
       ],
     },
 
