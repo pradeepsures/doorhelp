@@ -7,11 +7,13 @@ import {
   FiMoreVertical,
   FiDownload,
   FiCheckCircle,
-  FiXCircle
+  FiXCircle,
+  FiCreditCard
 } from "react-icons/fi";
 import { getVendors, approveVendor, rejectVendor } from "../../Services/vendorService";
 import { formatDate } from "../../utils/dateFormatter";
 import { exportToExcel } from "../../utils/exportToexcel";
+import WalletAdjustModal from "../../compoents/WalletAdjustModal";
 import toast from "react-hot-toast";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
@@ -25,6 +27,9 @@ export default function VendorList() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [verifyFilter, setVerifyFilter] = useState("");
+
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
+  const [selectedWalletVendor, setSelectedWalletVendor] = useState(null);
 
   const [openMenuId, setOpenMenuId] = useState(null);
   const menuRefs = useRef({});
@@ -178,6 +183,17 @@ export default function VendorList() {
             >
               <FiDownload /> Excel
             </button>
+
+            {/* Wallet Management Button */}
+            {/* <button
+              onClick={() => {
+                setSelectedWalletVendor(null);
+                setIsWalletModalOpen(true);
+              }}
+              className="px-4 py-2 flex items-center justify-center gap-2 bg-[#0D877F] text-white rounded-lg hover:bg-[#0B726B] transition font-medium text-sm shadow-xs cursor-pointer"
+            >
+              <FiCreditCard /> Manage Wallet
+            </button> */}
           </div>
         </div>
 
@@ -227,6 +243,16 @@ export default function VendorList() {
                         </td>
                         <td className="px-6 py-4 text-sm font-semibold text-gray-700">
                           ₹{row.walletBalance !== undefined ? row.walletBalance : 0}
+                          <button
+                              onClick={() => {
+                                setSelectedWalletVendor(row);
+                                setIsWalletModalOpen(true);
+                              }}
+                              className="p-2 hover:bg-[#0D877F]/10 text-[#0D877F] rounded-full transition-colors cursor-pointer"
+                              title="Add / Deduct Balance"
+                            >
+                              <FiCreditCard size={17} />
+                            </button>
                         </td>
                         <td className="px-6 py-4 text-sm text-gray-600 max-w-xs truncate" title={row.address || "N/A"}>
                           {row.address || "N/A"}
@@ -249,51 +275,75 @@ export default function VendorList() {
                           </button>
                         </td>
                         <td className="px-6 py-4 text-right overflow-visible">
-                          <div
-                            ref={(el) => (menuRefs.current[row._id] = el)}
-                            className="inline-block relative"
-                          >
-                            <button
-                              onClick={() => toggleMenu(row._id)}
-                              className="p-2 hover:bg-gray-100 rounded-full text-gray-500 transition-colors"
+                          <div className="flex items-center justify-end gap-1">
+                            {/* <button
+                              onClick={() => {
+                                setSelectedWalletVendor(row);
+                                setIsWalletModalOpen(true);
+                              }}
+                              className="p-2 hover:bg-[#0D877F]/10 text-[#0D877F] rounded-full transition-colors cursor-pointer"
+                              title="Add / Deduct Balance"
                             >
-                              <FiMoreVertical size={18} />
-                            </button>
-                            {openMenuId === row._id && (
-                              <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 py-1 z-50 text-left">
-                                <button
-                                  onClick={() => {
-                                    setOpenMenuId(null);
-                                    navigate(`/home/vendor/view/${row._id}`);
-                                  }}
-                                  className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition w-full text-left font-medium"
-                                >
-                                  <FiEye size={16} className="text-[#0D877F]" /> View details
-                                </button>
+                              <FiCreditCard size={17} />
+                            </button> */}
 
-                                {!row.isVerified ? (
+                            <div
+                              ref={(el) => (menuRefs.current[row._id] = el)}
+                              className="inline-block relative"
+                            >
+                              <button
+                                onClick={() => toggleMenu(row._id)}
+                                className="p-2 hover:bg-gray-100 rounded-full text-gray-500 transition-colors cursor-pointer"
+                              >
+                                <FiMoreVertical size={18} />
+                              </button>
+                              {openMenuId === row._id && (
+                                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 py-1 z-50 text-left">
                                   <button
                                     onClick={() => {
                                       setOpenMenuId(null);
-                                      handleToggleVerify(row._id, row.isVerified);
+                                      navigate(`/home/vendor/view/${row._id}`);
+                                    }}
+                                    className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition w-full text-left font-medium"
+                                  >
+                                    <FiEye size={16} className="text-[#0D877F]" /> View details
+                                  </button>
+
+                                  <button
+                                    onClick={() => {
+                                      setOpenMenuId(null);
+                                      setSelectedWalletVendor(row);
+                                      setIsWalletModalOpen(true);
                                     }}
                                     className="flex items-center gap-2 px-4 py-2 text-sm text-[#0D877F] hover:bg-[#0D877F]/5 transition w-full text-left font-medium"
                                   >
-                                    <FiCheckCircle size={16} /> Verify & Approve
+                                    <FiCreditCard size={16} /> Manage Wallet
                                   </button>
-                                ) : (
-                                  <button
-                                    onClick={() => {
-                                      setOpenMenuId(null);
-                                      handleToggleVerify(row._id, row.isVerified);
-                                    }}
-                                    className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition w-full text-left font-medium"
-                                  >
-                                    <FiXCircle size={16} /> Reject / Disable
-                                  </button>
-                                )}
-                              </div>
-                            )}
+
+                                  {!row.isVerified ? (
+                                    <button
+                                      onClick={() => {
+                                        setOpenMenuId(null);
+                                        handleToggleVerify(row._id, row.isVerified);
+                                      }}
+                                      className="flex items-center gap-2 px-4 py-2 text-sm text-[#0D877F] hover:bg-[#0D877F]/5 transition w-full text-left font-medium"
+                                    >
+                                      <FiCheckCircle size={16} /> Verify & Approve
+                                    </button>
+                                  ) : (
+                                    <button
+                                      onClick={() => {
+                                        setOpenMenuId(null);
+                                        handleToggleVerify(row._id, row.isVerified);
+                                      }}
+                                      className="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition w-full text-left font-medium"
+                                    >
+                                      <FiXCircle size={16} /> Reject / Disable
+                                    </button>
+                                  )}
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </td>
                       </tr>
@@ -356,6 +406,16 @@ export default function VendorList() {
                         {/* Action buttons directly accessible on mobile */}
                         <div className="flex gap-1.5">
                           <button
+                            onClick={() => {
+                              setSelectedWalletVendor(row);
+                              setIsWalletModalOpen(true);
+                            }}
+                            className="p-2 bg-[#0D877F]/10 hover:bg-[#0D877F] hover:text-white rounded-full text-[#0D877F] transition shadow-xs border border-[#0D877F]/20 cursor-pointer"
+                            title="Manage Wallet"
+                          >
+                            <FiCreditCard size={15} />
+                          </button>
+                          <button
                             onClick={() => navigate(`/home/vendor/view/${row._id}`)}
                             className="p-2 bg-gray-50 hover:bg-[#0D877F] hover:text-white rounded-full text-gray-600 transition shadow-sm border border-gray-200/50"
                             title="View Details"
@@ -408,6 +468,15 @@ export default function VendorList() {
           )}
         </div>
       </div>
+
+      {/* Wallet Management Modal */}
+      <WalletAdjustModal
+        isOpen={isWalletModalOpen}
+        onClose={() => setIsWalletModalOpen(false)}
+        entityType="vendor"
+        targetEntity={selectedWalletVendor}
+        onSuccess={() => fetchVendors(page, search, statusFilter, verifyFilter)}
+      />
     </div>
   );
 }

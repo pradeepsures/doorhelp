@@ -118,8 +118,6 @@ export default function CouponList() {
       Code: coupon.code || "",
       Type: coupon.discountType === "percentage" ? "Percentage (%)" : "Flat (₹)",
       Value: coupon.discountValue || 0,
-      "Min Order Value": coupon.minOrderValue || 0,
-      "Max Discount": coupon.maxDiscountAmount || 0,
       "Usage Limit": coupon.usageLimit ?? "Unlimited",
       "Usage Count": coupon.usageCount || 0,
       Status: coupon.status === "active" ? "Active" : "Inactive",
@@ -217,7 +215,6 @@ export default function CouponList() {
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Title</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Code</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Discount</th>
-                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Min Order</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Usage (Used/Limit)</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Expiry Date</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Status</th>
@@ -243,9 +240,6 @@ export default function CouponList() {
                         </td>
                         <td className="px-6 py-3 text-sm font-semibold text-gray-800">
                           {row.discountType === "percentage" ? `${row.discountValue}%` : `₹${row.discountValue}`}
-                        </td>
-                        <td className="px-6 py-3 text-sm text-gray-600">
-                          ₹{row.minOrderValue}
                         </td>
                         <td className="px-6 py-3 text-sm text-gray-600">
                           {row.usageCount} / {row.usageLimit ?? "∞"}

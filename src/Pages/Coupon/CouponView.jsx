@@ -140,24 +140,6 @@ const CouponView = () => {
                     {coupon.discountType}
                   </span>
                 </div>
-
-                <div>
-                  <span className="text-xs text-gray-500 block">Minimum Order Amount</span>
-                  <span className="text-sm font-semibold text-gray-700">
-                    ₹{coupon.minOrderValue || 0}
-                  </span>
-                </div>
-
-                <div>
-                  <span className="text-xs text-gray-500 block">Maximum Discount Cap</span>
-                  <span className="text-sm font-semibold text-gray-700">
-                    {coupon.discountType === "percentage"
-                      ? coupon.maxDiscountAmount > 0
-                        ? `₹${coupon.maxDiscountAmount}`
-                        : "Unlimited (No Cap)"
-                      : "Not applicable (Flat rate)"}
-                  </span>
-                </div>
               </div>
             </div>
 

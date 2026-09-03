@@ -13,8 +13,6 @@ const CouponForm = () => {
     code: "",
     discountType: "flat",
     discountValue: "",
-    minOrderValue: 0,
-    maxDiscountAmount: 0,
     startDate: "",
     expiryDate: "",
     usageLimit: "",
@@ -45,10 +43,8 @@ const CouponForm = () => {
             setFormData({
               name: coupon.name || "",
               code: coupon.code || "",
-              discountType: coupon.discountType || "percentage",
+              discountType: coupon.discountType || "flat",
               discountValue: coupon.discountValue || "",
-              minOrderValue: coupon.minOrderValue || 0,
-              maxDiscountAmount: coupon.maxDiscountAmount || 0,
               startDate: toInputDate(coupon.startDate),
               expiryDate: toInputDate(coupon.expiryDate),
               usageLimit: coupon.usageLimit ?? "",
@@ -108,8 +104,6 @@ const CouponForm = () => {
     const payload = {
       ...formData,
       discountValue: Number(formData.discountValue),
-      minOrderValue: Number(formData.minOrderValue),
-      maxDiscountAmount: Number(formData.maxDiscountAmount),
       usageLimit: formData.usageLimit === "" ? null : Number(formData.usageLimit),
     };
 
@@ -200,7 +194,7 @@ const CouponForm = () => {
                   onChange={handleChange}
                   className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0D877F] text-sm text-gray-700"
                 >
-                  <option value="percentage">Percentage (%)</option>
+                  {/* <option value="percentage">Percentage (%)</option> */}
                   <option value="flat">Flat Amount (₹)</option>
                 </select>
               </div>
@@ -222,44 +216,6 @@ const CouponForm = () => {
                   step="any"
                   required
                 />
-              </div>
-
-              {/* Min Order Value */}
-              <div>
-                <label htmlFor="minOrderValue" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Minimum Order Value (₹)
-                </label>
-                <input
-                  type="number"
-                  id="minOrderValue"
-                  name="minOrderValue"
-                  value={formData.minOrderValue}
-                  onChange={handleChange}
-                  placeholder="e.g. 499"
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0D877F] text-sm text-gray-700"
-                  min="0"
-                />
-              </div>
-
-              {/* Max Discount Amount */}
-              <div>
-                <label htmlFor="maxDiscountAmount" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Maximum Discount Amount (₹)
-                </label>
-                <input
-                  type="number"
-                  id="maxDiscountAmount"
-                  name="maxDiscountAmount"
-                  value={formData.maxDiscountAmount}
-                  onChange={handleChange}
-                  placeholder="e.g. 200 (set 0 for flat discount / no limit)"
-                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0D877F] text-sm text-gray-700"
-                  min="0"
-                  disabled={formData.discountType === "flat"}
-                />
-                {formData.discountType === "flat" && (
-                  <span className="text-xs text-gray-400 mt-1 block">Not applicable for flat discount</span>
-                )}
               </div>
 
               {/* Start Date */}

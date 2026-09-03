@@ -68,3 +68,20 @@ export const rejectVendor = async (id) => {
   }
   return result;
 };
+
+export const adjustVendorWallet = async (id, data) => {
+  const res = await fetch(`${BASE_URL}/api/v1/admin/vendor/${id}/wallet/adjust`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getToken()}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(result?.message || "Failed to adjust vendor wallet");
+  }
+  return result;
+};
