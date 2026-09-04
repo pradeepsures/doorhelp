@@ -58,3 +58,42 @@ export const deleteCoupon = async (id) => {
   });
   return res.json();
 };
+
+export const assignCoupon = async (id, data) => {
+  const res = await fetch(`${BASE_URL}/api/v1/admin/coupons/${id}/assign`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getToken()}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return res.json();
+};
+
+export const unassignCoupon = async (id, data) => {
+  const res = await fetch(`${BASE_URL}/api/v1/admin/coupons/${id}/unassign`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getToken()}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return res.json();
+};
+
+export const getCouponAssignedUsers = async (id, page = 1, limit = 20, search = "") => {
+  const query = new URLSearchParams();
+  if (page) query.append("page", page);
+  if (limit) query.append("limit", limit);
+  if (search) query.append("search", search);
+
+  const res = await fetch(`${BASE_URL}/api/v1/admin/coupons/${id}/assigned-users?${query.toString()}`, {
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+    },
+  });
+  return res.json();
+};
+

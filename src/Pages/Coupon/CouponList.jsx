@@ -8,11 +8,13 @@ import {
   FiPlus,
   FiDownload,
   FiRefreshCw,
-  FiEye
+  FiEye,
+  FiUsers
 } from "react-icons/fi";
 import { getCoupons, deleteCoupon, updateCoupon } from "../../Services/couponService";
 import { exportToExcel } from "../../utils/exportToexcel";
 import { formatDate } from "../../utils/dateFormatter";
+import AssignCouponModal from "./AssignCouponModal";
 import toast from "react-hot-toast";
 
 export default function CouponList() {
@@ -27,6 +29,7 @@ export default function CouponList() {
   const [statusFilter, setStatusFilter] = useState("");
 
   const [openMenuId, setOpenMenuId] = useState(null);
+  const [selectedCouponForAssign, setSelectedCouponForAssign] = useState(null);
   const menuRefs = useRef({});
 
   const fetchCoupons = async (currentPage, searchQuery, currentStatus) => {
@@ -216,6 +219,7 @@ export default function CouponList() {
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Code</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Discount</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Usage (Used/Limit)</th>
+                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Assigned To</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Expiry Date</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Status</th>
                     <th className="px-6 py-4 text-right font-medium tracking-wider bg-theme-gradient-horizontal">Actions</th>
@@ -244,6 +248,22 @@ export default function CouponList() {
                         <td className="px-6 py-3 text-sm text-gray-600">
                           {row.usageCount} / {row.usageLimit ?? "∞"}
                         </td>
+                        <td className="px-6 py-3 text-sm">
+                          {row.isForAllUsers ? (
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                              All Users
+                            </span>
+                          ) : (
+                            <button
+                              onClick={() => setSelectedCouponForAssign(row)}
+                              className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition cursor-pointer"
+                              title="Click to manage assigned users"
+                            >
+                              <FiUsers size={12} />
+                              {row.assignedUsersCount || row.assignedUsers?.length || 0} User(s)
+                            </button>
+                          )}
+                        </td>
                         <td className="px-6 py-3 text-sm text-gray-500 font-medium">
                           {formatDate(row.expiryDate)}
                         </td>
@@ -261,56 +281,80 @@ export default function CouponList() {
 
                         {/* ACTIONS */}
                         <td className="px-6 py-3 text-right">
-                          <div
-                            ref={(el) => (menuRefs.current[row._id] = el)}
-                            className="inline-block relative"
-                          >
-                            <button
-                              onClick={() => toggleMenu(row._id)}
-                              className="p-2 hover:bg-gray-100 rounded-full text-gray-500 transition-colors cursor-pointer"
+                          <div className="flex items-center justify-end gap-1">
+                            {/* Quick Assign Button */}
+                            {/* <button
+                              onClick={() => setSelectedCouponForAssign(row)}
+                              title="Assign Coupon to Users"
+                              className="p-1.5 hover:bg-teal-50 text-[#0D877F] rounded-lg transition-colors cursor-pointer inline-flex items-center gap-1 text-xs font-semibold border border-teal-200/60"
                             >
-                              <FiMoreVertical size={18} />
-                            </button>
+                              <FiUsers size={14} />
+                              <span className="hidden sm:inline">Assign</span>
+                            </button> */}
 
-                            {openMenuId === row._id && (
-                              <ul className="absolute right-0 mt-2 w-36 bg-white border border-gray-100 rounded-lg shadow-xl text-sm z-50 overflow-hidden text-left">
-                                <li>
-                                  <button
-                                    onClick={() => {
-                                      setOpenMenuId(null);
-                                      navigate(`/home/coupon/view/${row._id}`);
-                                    }}
-                                    className="w-full px-4 py-2.5 hover:bg-gray-50 flex items-center gap-3 text-gray-700 transition-colors font-medium cursor-pointer text-left"
-                                  >
-                                    <FiEye size={15} /> View
-                                  </button>
-                                </li>
+                            <div
+                              ref={(el) => (menuRefs.current[row._id] = el)}
+                              className="inline-block relative"
+                            >
+                              <button
+                                onClick={() => toggleMenu(row._id)}
+                                className="p-2 hover:bg-gray-100 rounded-full text-gray-500 transition-colors cursor-pointer"
+                              >
+                                <FiMoreVertical size={18} />
+                              </button>
 
-                                <li>
-                                  <button
-                                    onClick={() => {
-                                      setOpenMenuId(null);
-                                      navigate(`/home/coupon/edit/${row._id}`);
-                                    }}
-                                    className="w-full px-4 py-2.5 hover:bg-blue-50 flex items-center gap-3 text-blue-600 transition-colors font-medium cursor-pointer text-left"
-                                  >
-                                    <FiEdit size={15} /> Edit
-                                  </button>
-                                </li>
+                              {openMenuId === row._id && (
+                                <ul className="absolute right-0 mt-2 w-44 bg-white border border-gray-100 rounded-lg shadow-xl text-sm z-50 overflow-hidden text-left">
+                                  <li>
+                                    <button
+                                      onClick={() => {
+                                        setOpenMenuId(null);
+                                        setSelectedCouponForAssign(row);
+                                      }}
+                                      className="w-full px-4 py-2.5 hover:bg-teal-50 flex items-center gap-3 text-[#0D877F] transition-colors font-medium cursor-pointer text-left"
+                                    >
+                                      <FiUsers size={15} /> Assign Coupon
+                                    </button>
+                                  </li>
 
-                                <li>
-                                  <button
-                                    onClick={() => {
-                                      setOpenMenuId(null);
-                                      handleDelete(row._id);
-                                    }}
-                                    className="w-full px-4 py-2.5 hover:bg-red-50 flex items-center gap-3 text-red-600 transition-colors font-medium cursor-pointer text-left"
-                                  >
-                                    <FiTrash2 size={15} /> Delete
-                                  </button>
-                                </li>
-                              </ul>
-                            )}
+                                  <li>
+                                    <button
+                                      onClick={() => {
+                                        setOpenMenuId(null);
+                                        navigate(`/home/coupon/view/${row._id}`);
+                                      }}
+                                      className="w-full px-4 py-2.5 hover:bg-gray-50 flex items-center gap-3 text-gray-700 transition-colors font-medium cursor-pointer text-left"
+                                    >
+                                      <FiEye size={15} /> View
+                                    </button>
+                                  </li>
+
+                                  <li>
+                                    <button
+                                      onClick={() => {
+                                        setOpenMenuId(null);
+                                        navigate(`/home/coupon/edit/${row._id}`);
+                                      }}
+                                      className="w-full px-4 py-2.5 hover:bg-blue-50 flex items-center gap-3 text-blue-600 transition-colors font-medium cursor-pointer text-left"
+                                    >
+                                      <FiEdit size={15} /> Edit
+                                    </button>
+                                  </li>
+
+                                  <li>
+                                    <button
+                                      onClick={() => {
+                                        setOpenMenuId(null);
+                                        handleDelete(row._id);
+                                      }}
+                                      className="w-full px-4 py-2.5 hover:bg-red-50 flex items-center gap-3 text-red-600 transition-colors font-medium cursor-pointer text-left"
+                                    >
+                                      <FiTrash2 size={15} /> Delete
+                                    </button>
+                                  </li>
+                                </ul>
+                              )}
+                            </div>
                           </div>
                         </td>
                       </tr>
@@ -349,6 +393,14 @@ export default function CouponList() {
           )}
         </div>
       </div>
+
+      {/* Assign Coupon Modal */}
+      <AssignCouponModal
+        isOpen={!!selectedCouponForAssign}
+        onClose={() => setSelectedCouponForAssign(null)}
+        coupon={selectedCouponForAssign}
+        onAssigned={() => fetchCoupons(page, search, statusFilter)}
+      />
     </div>
   );
 }
