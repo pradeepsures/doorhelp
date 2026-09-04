@@ -190,7 +190,7 @@ const ReferAndEarnForm = () => {
                     name="referredUserBonus"
                     value={formData.referredUserBonus}
                     onChange={handleChange}
-                    placeholder="e.g. 50"
+                    placeholder="e.g. 25"
                     className="w-full pl-8 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0D877F] text-sm text-gray-700"
                     min="0"
                     step="any"
@@ -233,6 +233,7 @@ const ReferAndEarnForm = () => {
                 <option value="active">Active (Program is live)</option>
                 <option value="inactive">Inactive (Program is paused)</option>
               </select>
+              <p className="text-xs text-gray-400 mt-1">If inactive, referral codes cannot be used by new users</p>
             </div>
 
             {/* Actions */}
