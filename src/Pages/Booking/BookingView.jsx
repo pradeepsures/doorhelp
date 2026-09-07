@@ -396,9 +396,21 @@ export default function BookingView() {
                       <span>₹{booking.serviceTotal}</span>
                     </div>
                   )}
+                  {Boolean(booking.discount && booking.discount > 0) && (
+                    <div className="flex justify-between text-emerald-600 font-medium">
+                      <span>Coupon Discount {booking.coupon?.code ? `(${booking.coupon.code})` : ''}</span>
+                      <span>-₹{booking.discount}</span>
+                    </div>
+                  )}
+                  {Boolean(booking.discount && booking.discount > 0 && booking.serviceTotal !== undefined) && (
+                    <div className="flex justify-between text-gray-600 font-medium">
+                      <span>Discounted Service Charge</span>
+                      <span>₹{Math.max(0, booking.serviceTotal - booking.discount)}</span>
+                    </div>
+                  )}
                   {booking.taxAndFees !== undefined && (
                     <div className="flex justify-between text-gray-600">
-                      <span>Taxes & Fees (5%)</span>
+                      <span>Taxes & Fees</span>
                       <span>₹{booking.taxAndFees}</span>
                     </div>
                   )}
