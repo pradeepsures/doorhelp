@@ -133,13 +133,13 @@ const AppVersion = () => {
               </div>
           )}
           <table className="min-w-full bg-white border">
-            <thead>
-              <tr className="bg-gray-100 border-b">
-                <th className="p-3 text-left">App Name</th>
-                <th className="p-3 text-left">Latest Version</th>
-                <th className="p-3 text-left">Min Required Version</th>
-                <th className="p-3 text-left">Mandatory?</th>
-                <th className="p-3 text-left">Actions</th>
+            <thead className="text-white text-sm uppercase">
+              <tr>
+                <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">App Name</th>
+                <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Latest Version</th>
+                <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Min Required Version</th>
+                <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Mandatory?</th>
+                <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Actions</th>
               </tr>
             </thead>
             <tbody>

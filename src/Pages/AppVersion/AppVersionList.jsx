@@ -50,12 +50,12 @@ const AppVersionList = () => {
       <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-gradient-to-r from-[#0D877F] to-teal-600 text-white">
-                <th className="p-4 font-semibold">User App Version</th>
-                <th className="p-4 font-semibold">Vendor App Version</th>
-                <th className="p-4 font-semibold">Mandatory Update</th>
-                <th className="p-4 font-semibold text-center">Actions</th>
+            <thead className="text-white text-sm uppercase">
+              <tr>
+                <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">User App Version</th>
+                <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Vendor App Version</th>
+                <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Mandatory Update</th>
+                <th className="px-6 py-4 text-center font-medium tracking-wider bg-theme-gradient-horizontal">Actions</th>
               </tr>
             </thead>
             <tbody>
