@@ -45,6 +45,8 @@ import ReferAndEarnView from "./Pages/ReferAndEarn/ReferAndEarnView";
 import PrivacyPolicyPublic from "./Pages/Public/PrivacyPolicyPublic";
 import AboutUsPublic from "./Pages/Public/AboutUsPublic";
 import DeleteAccountPublic from "./Pages/Public/DeleteAccountPublic";
+import AppVersionList from "./Pages/AppVersion/AppVersionList";
+import AppVersionForm from "./Pages/AppVersion/AppVersionForm";
 
 const router = createBrowserRouter([
   {
@@ -115,6 +117,9 @@ const router = createBrowserRouter([
       { path: "refer-and-earn/create", element: <ReferAndEarnForm /> },
       { path: "refer-and-earn/edit/:id", element: <ReferAndEarnForm /> },
       { path: "refer-and-earn/view/:id", element: <ReferAndEarnView /> },
+      { path: "app-version", element: <AppVersionList /> },
+      { path: "app-version/create", element: <AppVersionForm /> },
+      { path: "app-version/edit/:id", element: <AppVersionForm /> },
     ],
   },
   {
