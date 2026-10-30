@@ -48,6 +48,7 @@ const Sidebar = ({ open, setOpen }) => {
         { name: "Coupon", link: "/home/coupon" },
         { name: "Platform Fee", link: "/home/platform-fee" },
         { name: "Refer & Earn", link: "/home/refer-and-earn" },
+        { name: "App Version", link: "/home/app-version" },
       ],
     },
 
