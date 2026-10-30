@@ -137,7 +137,8 @@ export default function PlatformFeeList() {
                 <thead className="text-white text-sm uppercase">
                   <tr>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Sr No</th>
-                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Platform Fee</th>
+                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal"> Vendor Platform Fee</th>
+                    <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal"> User Platform Fee</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">GST Percentage</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Status</th>
                     <th className="px-6 py-4 text-left font-medium tracking-wider bg-theme-gradient-horizontal">Created Date</th>
@@ -157,6 +158,9 @@ export default function PlatformFeeList() {
                         </td>
                         <td className="px-6 py-3 text-sm font-bold text-gray-800">
                           {row.platformFee}%
+                        </td>
+                         <td className="px-6 py-3 text-sm font-bold text-gray-800">
+                          {row.userPlatformFee}%
                         </td>
                         <td className="px-6 py-3 text-sm font-semibold text-gray-700">
                           {row.gst}%

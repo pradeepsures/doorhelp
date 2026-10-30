@@ -128,6 +128,13 @@ const PlatformFeeView = () => {
                 </span>
               </div>
 
+               <div>
+                <span className="text-xs text-gray-500 block">User Platform Fee Percentage</span>
+                <span className="text-xl font-bold text-gray-800">
+                  {feeData.userPlatformFee}%
+                </span>
+              </div>
+
               <div>
                 <span className="text-xs text-gray-500 block">GST Percentage</span>
                 <span className="text-xl font-bold text-gray-800">

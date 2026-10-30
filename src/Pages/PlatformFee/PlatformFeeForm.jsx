@@ -10,6 +10,7 @@ const PlatformFeeForm = () => {
 
   const [formData, setFormData] = useState({
     platformFee: "",
+    userPlatformFee: "",
     gst: "",
     status: "active",
   });
@@ -26,6 +27,7 @@ const PlatformFeeForm = () => {
             const data = res.data;
             setFormData({
               platformFee: data.platformFee ?? "",
+              userPlatformFee: data.userPlatformFee ?? "",
               gst: data.gst ?? "",
               status: data.status || "active",
             });
@@ -66,6 +68,7 @@ const PlatformFeeForm = () => {
     setSubmitting(true);
     const payload = {
       platformFee: Number(formData.platformFee),
+      userPlatformFee: Number(formData.userPlatformFee),
       gst: Number(formData.gst),
       status: formData.status,
     };
@@ -121,6 +124,26 @@ const PlatformFeeForm = () => {
                   id="platformFee"
                   name="platformFee"
                   value={formData.platformFee}
+                  onChange={handleChange}
+                  placeholder="e.g. 5"
+                  className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0D877F] text-sm text-gray-700"
+                  min="0"
+                  max="100"
+                  step="any"
+                  required
+                />
+              </div>
+
+              {/* User plateformFee */}
+                  <div>
+                <label htmlFor="platformFee" className="block text-sm font-semibold text-gray-700 mb-2">
+                  Platform Fee Percentage (%)
+                </label>
+                <input
+                  type="number"
+                  id="userPlatformFee"
+                  name="userPlatformFee"
+                  value={formData.userPlatformFee}
                   onChange={handleChange}
                   placeholder="e.g. 5"
                   className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0D877F] text-sm text-gray-700"
