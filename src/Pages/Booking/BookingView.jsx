@@ -414,6 +414,12 @@ export default function BookingView() {
                       <span>₹{booking.taxAndFees}</span>
                     </div>
                   )}
+                    {booking.taxAndFees !== undefined && (
+                    <div className="flex justify-between text-gray-600">
+                      <span>Platform FeeAmount</span>
+                      <span>₹{booking.platformFeeAmount}</span>
+                    </div>
+                  )}
                   {booking.serviceTotal !== undefined && (
                     <div className="flex justify-between text-gray-600">
                       <span>Travel Fee</span>
